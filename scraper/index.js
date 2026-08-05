@@ -1,25 +1,24 @@
 #!/usr/bin/env node
 // Banker's Buddy rate scraper.
 //
-// Fetches each configured bank's FD-rate page, parses it, and writes
-// ../data/rates.json. Designed to run on a GitHub Actions runner (open
-// internet) on a schedule. It is deliberately fault-tolerant: if a bank fails
-// or yields nothing, we keep the previous known rows and mark that bank
-// "stale" instead of dropping it, so the site never loses data.
+// For each product (FD, Home Loan) it fetches every configured bank page,
+// parses it, and writes ../data/<out>.json. Designed to run on a GitHub Actions
+// runner (open internet) on a schedule. It is deliberately fault-tolerant: if a
+// bank fails or yields nothing, we keep the previous known rows and mark that
+// bank "stale" instead of dropping it, so the site never loses data.
 
 const fs = require("fs");
 const path = require("path");
-const banks = require("./banks");
-const { parseRates } = require("./parse");
+const products = require("./products");
 
-const OUT = path.join(__dirname, "..", "data", "rates.json");
+const DATA_DIR = path.join(__dirname, "..", "data");
 const TIMEOUT_MS = 20000;
 const UA =
   "Mozilla/5.0 (compatible; BankersBuddyBot/1.0; +https://github.com/BALVEERMEENA/bankers-buddy-web)";
 
-function readExisting() {
+function readExisting(file) {
   try {
-    return JSON.parse(fs.readFileSync(OUT, "utf8"));
+    return JSON.parse(fs.readFileSync(file, "utf8"));
   } catch {
     return { banks: [] };
   }
@@ -41,13 +40,13 @@ async function fetchHtml(url) {
   }
 }
 
-async function scrapeBank(bank, prev) {
+async function scrapeBank(product, bank, prev) {
   const now = new Date().toISOString();
   try {
     const html = await fetchHtml(bank.url);
-    const rates = parseRates(html, bank.match);
+    const rates = product.parser(html, bank.match);
     if (!rates.length) throw new Error("no rate rows parsed");
-    console.log(`✓ ${bank.name}: ${rates.length} rows`);
+    console.log(`  ✓ ${bank.name}: ${rates.length} rows`);
     return {
       id: bank.id,
       name: bank.name,
@@ -57,7 +56,7 @@ async function scrapeBank(bank, prev) {
       rates,
     };
   } catch (err) {
-    console.warn(`✗ ${bank.name}: ${err.message} — keeping previous data`);
+    console.warn(`  ✗ ${bank.name}: ${err.message} — keeping previous data`);
     return {
       id: bank.id,
       name: bank.name,
@@ -70,30 +69,43 @@ async function scrapeBank(bank, prev) {
   }
 }
 
-async function main() {
-  const existing = readExisting();
-  const prevById = Object.fromEntries((existing.banks || []).map((b) => [b.id, b]));
+async function scrapeProduct(product) {
+  console.log(`\n${product.label}:`);
+  const outFile = path.join(DATA_DIR, product.out);
+  const existing = readExisting(outFile);
+  const prevById = Object.fromEntries(
+    (existing.banks || []).map((b) => [b.id, b])
+  );
 
   const results = [];
-  for (const bank of banks) {
+  for (const bank of product.banks) {
     // Sequential + a small pause: gentle on the sites, avoids rate-limiting.
-    results.push(await scrapeBank(bank, prevById[bank.id]));
+    results.push(await scrapeBank(product, bank, prevById[bank.id]));
     await new Promise((r) => setTimeout(r, 800));
   }
 
   const out = {
+    product: product.id,
+    label: product.label,
+    better: product.better,
     updatedAt: new Date().toISOString(),
-    disclaimer:
-      "Rates are scraped from public bank pages for general public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
+    disclaimer: product.disclaimer,
     currency: "INR",
     banks: results,
   };
 
-  fs.mkdirSync(path.dirname(OUT), { recursive: true });
-  fs.writeFileSync(OUT, JSON.stringify(out, null, 2) + "\n");
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(outFile, JSON.stringify(out, null, 2) + "\n");
 
   const live = results.filter((r) => r.status === "live").length;
-  console.log(`\nWrote ${OUT} — ${live}/${results.length} banks live.`);
+  console.log(`  → ${product.out}: ${live}/${results.length} banks live.`);
+}
+
+async function main() {
+  for (const product of products) {
+    await scrapeProduct(product);
+  }
+  console.log("\nDone.");
 }
 
 main().catch((e) => {

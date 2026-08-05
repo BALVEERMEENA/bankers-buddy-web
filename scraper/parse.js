@@ -90,4 +90,97 @@ function parseRates(html, match) {
   return [];
 }
 
-module.exports = { parseRates, asRate, isTenure };
+// ---------------------------------------------------------------------------
+// Home-loan parser
+//
+// Home-loan pages differ from FD pages: rows are keyed by a borrower category
+// (CIBIL band, salaried/self-employed, or loan slab) and the rate is usually a
+// range like "8.50% - 9.65%". We pull the label cell plus every rate figure in
+// the row, then reduce to {min, max}.
+
+// Plausible home-loan rate band (%). Filters out loan amounts/tenures/scores.
+const HL_MIN = 5;
+const HL_MAX = 18;
+
+// Extract rate figures from a row's text. Prefer numbers written with a % sign;
+// fall back to bare in-band numbers only if none carry a %.
+function extractLoanRates(text) {
+  const t = String(text);
+  const withPct = [];
+  let m;
+  const pctRe = /(\d{1,2}(?:\.\d{1,2})?)\s*%/g;
+  while ((m = pctRe.exec(t))) {
+    const v = parseFloat(m[1]);
+    if (v >= HL_MIN && v <= HL_MAX) withPct.push(v);
+  }
+  if (withPct.length) return withPct;
+
+  const bare = [];
+  const bareRe = /(\d{1,2}\.\d{1,2})/g; // require a decimal to avoid scores/slabs
+  while ((m = bareRe.exec(t))) {
+    const v = parseFloat(m[1]);
+    if (v >= HL_MIN && v <= HL_MAX) bare.push(v);
+  }
+  return bare;
+}
+
+// A lone rate figure, e.g. "8.45%" or "8.45" — used to exclude rate cells.
+function isRateCell(text) {
+  const t = String(text).trim();
+  return /^\d{1,2}(?:\.\d{1,2})?\s*%$/.test(t) || /^\d{1,2}\.\d{1,2}$/.test(t);
+}
+
+// A category label: any non-empty cell that isn't itself just a rate figure.
+// Accepts text ("Salaried"), CIBIL bands ("750 - 799"), and slabs ("Up to 30L").
+function isCategory(text) {
+  const t = String(text).trim();
+  return t.length > 1 && !isRateCell(t);
+}
+
+function parseLoanTable($, table) {
+  const rows = [];
+  $(table)
+    .find("tr")
+    .each((_, tr) => {
+      const cells = $(tr)
+        .find("td")
+        .map((__, td) => $(td).text().replace(/\s+/g, " ").trim())
+        .get();
+      if (cells.length < 2) return;
+
+      const category = cells.find(isCategory);
+      if (!category) return;
+
+      const rates = extractLoanRates(cells.join(" "));
+      if (!rates.length) return;
+
+      rows.push({
+        category: category,
+        min: Math.min.apply(null, rates),
+        max: Math.max.apply(null, rates),
+      });
+    });
+  return rows;
+}
+
+/**
+ * Parse home-loan rates out of a page's HTML.
+ * @param {string} html
+ * @param {string} [match] lowercase keyword hint for the right table
+ * @returns {Array<{category:string, min:number, max:number}>}
+ */
+function parseHomeLoanRates(html, match) {
+  const $ = cheerio.load(html);
+  const tables = $("table").toArray();
+  if (!tables.length) return [];
+
+  tables.sort((a, b) => tableScore($, b, match) - tableScore($, a, match));
+
+  for (const table of tables) {
+    const rows = parseLoanTable($, table);
+    if (rows.length >= 1) return rows;
+  }
+  return [];
+}
+
+module.exports = { parseRates, parseHomeLoanRates, asRate, isTenure };

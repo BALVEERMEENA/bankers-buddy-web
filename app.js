@@ -97,49 +97,100 @@
     calcSIP();
   }
 
-  // ---- FD Rates ---------------------------------------------------------
-  var ratesData = null;
-  var ratesLoaded = false;
-
+  // ---- Rate comparison (FD + Home Loan) --------------------------------
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
 
-  function bestRateFor(bank, audience) {
-    var best = null;
-    (bank.rates || []).forEach(function (row) {
-      var v = audience === "senior" ? row.senior || row.general : row.general;
-      if (v != null && (best == null || v > best.value)) {
-        best = { value: v, tenure: row.tenure };
-      }
-    });
-    return best;
+  function statusBadge(status) {
+    if (status === "live") return '<span class="badge live">live</span>';
+    if (status === "stale") return '<span class="badge stale">stale</span>';
+    if (status === "error") return '<span class="badge error">unavailable</span>';
+    return '<span class="badge sample">sample</span>';
   }
 
-  function renderRates() {
-    if (!ratesData) return;
-    var audience = document.getElementById("rates-audience").value;
-    var meta = document.getElementById("rates-meta");
-    var bestEl = document.getElementById("rates-best");
-    var listEl = document.getElementById("rates-list");
-    var disc = document.getElementById("rates-disclaimer");
+  // Per-panel state. Each rate tab has its own data + config.
+  var panels = {
+    rates: {
+      file: "data/rates.json",
+      noun: "Fixed-deposit",
+      data: null,
+      loaded: false,
+      // Best FD figure = highest of general/senior for the chosen audience.
+      pick: function (bank) {
+        var audience =
+          (document.getElementById("rates-audience") || {}).value || "general";
+        var best = null;
+        (bank.rates || []).forEach(function (r) {
+          var v = audience === "senior" ? r.senior || r.general : r.general;
+          if (v != null && (best == null || v > best.value)) {
+            best = { value: v, label: r.tenure };
+          }
+        });
+        return best;
+      },
+      better: "higher",
+      headCols: ["Tenure", "General", "Senior"],
+      row: function (r) {
+        var g = r.general != null ? r.general.toFixed(2) + "%" : "—";
+        var s = r.senior != null ? r.senior.toFixed(2) + "%" : "—";
+        return "<tr><td>" + esc(r.tenure) + "</td><td>" + g + "</td><td>" + s + "</td></tr>";
+      },
+    },
+    homeloan: {
+      file: "data/home-loan-rates.json",
+      noun: "Home-loan",
+      data: null,
+      loaded: false,
+      // Best home-loan figure = lowest starting (min) rate.
+      pick: function (bank) {
+        var best = null;
+        (bank.rates || []).forEach(function (r) {
+          if (r.min != null && (best == null || r.min < best.value)) {
+            best = { value: r.min, label: r.category };
+          }
+        });
+        return best;
+      },
+      better: "lower",
+      headCols: ["Category", "Interest rate (p.a.)"],
+      row: function (r) {
+        var rate =
+          r.min != null
+            ? r.max != null && r.max !== r.min
+              ? r.min.toFixed(2) + "% – " + r.max.toFixed(2) + "%"
+              : r.min.toFixed(2) + "%"
+            : "—";
+        return "<tr><td>" + esc(r.category) + "</td><td>" + rate + "</td></tr>";
+      },
+    },
+  };
 
-    var updated = ratesData.updatedAt
-      ? new Date(ratesData.updatedAt).toLocaleDateString()
+  function renderPanel(key) {
+    var cfg = panels[key];
+    if (!cfg.data) return;
+    var lower = cfg.better === "lower";
+    var meta = document.getElementById(key + "-meta");
+    var bestEl = document.getElementById(key + "-best");
+    var listEl = document.getElementById(key + "-list");
+    var disc = document.getElementById(key + "-disclaimer");
+
+    var updated = cfg.data.updatedAt
+      ? new Date(cfg.data.updatedAt).toLocaleDateString()
       : "unknown";
-    meta.textContent = "Fixed-deposit rates across " +
-      (ratesData.banks || []).length + " banks · updated " + updated;
-    disc.textContent = ratesData.disclaimer || "";
+    meta.textContent =
+      cfg.noun + " rates across " + (cfg.data.banks || []).length +
+      " banks · updated " + updated;
+    disc.textContent = cfg.data.disclaimer || "";
 
-    // Best-rate leaderboard
-    var ranked = (ratesData.banks || [])
-      .map(function (b) {
-        return { bank: b, best: bestRateFor(b, audience) };
-      })
+    var ranked = (cfg.data.banks || [])
+      .map(function (b) { return { bank: b, best: cfg.pick(b) }; })
       .filter(function (x) { return x.best; })
-      .sort(function (a, b) { return b.best.value - a.best.value; });
+      .sort(function (a, b) {
+        return lower ? a.best.value - b.best.value : b.best.value - a.best.value;
+      });
 
     bestEl.innerHTML = ranked
       .slice(0, 3)
@@ -148,45 +199,35 @@
         return (
           '<div class="best-card">' +
           '<span class="best-medal">' + medal + "</span>" +
-          '<span class="best-rate">' + x.best.value.toFixed(2) + "%</span>" +
+          '<span class="best-rate">' +
+          (lower ? "from " : "") + x.best.value.toFixed(2) + "%</span>" +
           '<span class="best-bank">' + esc(x.bank.name) + "</span>" +
-          '<span class="best-tenure">' + esc(x.best.tenure) + "</span>" +
+          '<span class="best-tenure">' + esc(x.best.label) + "</span>" +
           "</div>"
         );
       })
       .join("");
 
-    // Per-bank tables
+    var head =
+      "<thead><tr>" +
+      cfg.headCols.map(function (h) { return "<th>" + h + "</th>"; }).join("") +
+      "</tr></thead>";
+
     listEl.innerHTML = ranked
-      .map(function (x) {
+      .map(function (x, idx) {
         var b = x.bank;
-        var badge =
-          b.status === "live"
-            ? '<span class="badge live">live</span>'
-            : b.status === "stale"
-            ? '<span class="badge stale">stale</span>'
-            : b.status === "error"
-            ? '<span class="badge error">unavailable</span>'
-            : '<span class="badge sample">sample</span>';
-        var rows = (b.rates || [])
-          .map(function (r) {
-            var g = r.general != null ? r.general.toFixed(2) + "%" : "—";
-            var s = r.senior != null ? r.senior.toFixed(2) + "%" : "—";
-            return (
-              "<tr><td>" + esc(r.tenure) + "</td><td>" + g +
-              "</td><td>" + s + "</td></tr>"
-            );
-          })
-          .join("");
+        var top = lower
+          ? 'from <strong>' + x.best.value.toFixed(2) + "%</strong>"
+          : 'up to <strong>' + x.best.value.toFixed(2) + "%</strong>";
+        var rows = (b.rates || []).map(cfg.row).join("");
         return (
-          '<details class="bank-card"' + (ranked.indexOf(x) === 0 ? " open" : "") + ">" +
+          '<details class="bank-card"' + (idx === 0 ? " open" : "") + ">" +
           "<summary>" +
-          '<span class="bank-name">' + esc(b.name) + " " + badge + "</span>" +
-          '<span class="bank-top">up to <strong>' + x.best.value.toFixed(2) +
-          "%</strong></span>" +
+          '<span class="bank-name">' + esc(b.name) + " " + statusBadge(b.status) +
+          "</span>" +
+          '<span class="bank-top">' + top + "</span>" +
           "</summary>" +
-          '<div class="table-scroll"><table class="rate-table">' +
-          "<thead><tr><th>Tenure</th><th>General</th><th>Senior</th></tr></thead>" +
+          '<div class="table-scroll"><table class="rate-table">' + head +
           "<tbody>" + rows + "</tbody></table></div>" +
           '<a class="bank-source" href="' + esc(b.source) +
           '" target="_blank" rel="noopener">Source ↗</a>' +
@@ -196,19 +237,20 @@
       .join("");
   }
 
-  function loadRates(force) {
-    if (ratesLoaded && !force) return;
-    ratesLoaded = true;
-    var meta = document.getElementById("rates-meta");
+  function loadPanel(key, force) {
+    var cfg = panels[key];
+    if (cfg.loaded && !force) return;
+    cfg.loaded = true;
+    var meta = document.getElementById(key + "-meta");
     meta.textContent = "Loading rates…";
-    fetch("data/rates.json", { cache: force ? "reload" : "default" })
+    fetch(cfg.file, { cache: force ? "reload" : "default" })
       .then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
       .then(function (data) {
-        ratesData = data;
-        renderRates();
+        cfg.data = data;
+        renderPanel(key);
       })
       .catch(function (err) {
         meta.textContent =
@@ -225,9 +267,10 @@
     document.querySelectorAll(".panel").forEach(function (p) {
       p.classList.toggle("is-active", p.id === name);
     });
+    var isRateTab = name === "rates" || name === "homeloan";
     var curNote = document.querySelector(".currency-note");
-    if (curNote) curNote.style.display = name === "rates" ? "none" : "";
-    if (name === "rates") loadRates(false);
+    if (curNote) curNote.style.display = isRateTab ? "none" : "";
+    if (isRateTab) loadPanel(name, false);
   }
 
   // ---- Wire up ----------------------------------------------------------
@@ -253,11 +296,18 @@
 
     document
       .getElementById("rates-audience")
-      .addEventListener("change", renderRates);
+      .addEventListener("change", function () {
+        renderPanel("rates");
+      });
     document
       .getElementById("rates-refresh")
       .addEventListener("click", function () {
-        loadRates(true);
+        loadPanel("rates", true);
+      });
+    document
+      .getElementById("homeloan-refresh")
+      .addEventListener("click", function () {
+        loadPanel("homeloan", true);
       });
 
     recalcAll();

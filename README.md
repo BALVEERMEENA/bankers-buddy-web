@@ -30,15 +30,20 @@ python3 -m http.server 8000
 - **SIP** — projected value of a monthly recurring investment.
 - **FD Rates** — compare fixed-deposit interest rates across major banks, with a
   best-rate leaderboard and a general/senior-citizen toggle.
+- **Home Loan** — compare home-loan interest rates across banks, sorted by the
+  lowest starting rate, with each bank's rate broken down by CIBIL band /
+  borrower type.
 - Switch display currency (₹ INR, $ USD, £ GBP, € EUR).
 
 ## Live bank rates
 
-The **FD Rates** tab reads [`data/rates.json`](data/rates.json). Because banks
-don't offer CORS-friendly APIs, the browser can't fetch them directly — instead
-a small Node scraper (see [`scraper/`](scraper/)) runs daily on **GitHub
-Actions**, parses each bank's rates page, and commits an updated `rates.json`.
-The site then just loads that file.
+The **FD Rates** and **Home Loan** tabs read
+[`data/rates.json`](data/rates.json) and
+[`data/home-loan-rates.json`](data/home-loan-rates.json). Because banks don't
+offer CORS-friendly APIs, the browser can't fetch them directly — instead a
+small Node scraper (see [`scraper/`](scraper/)) runs daily on **GitHub
+Actions**, parses each bank's rates page, and commits the updated JSON. The site
+then just loads those files.
 
 The repo ships with **sample data** (marked `SAMPLE` in the UI) so the tab works
 immediately; real figures appear once the scheduled scraper runs. To refresh on

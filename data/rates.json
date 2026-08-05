@@ -1,4 +1,7 @@
 {
+  "product": "fd",
+  "label": "Fixed Deposit",
+  "better": "higher",
   "updatedAt": "2026-08-05T00:00:00Z",
   "disclaimer": "SAMPLE DATA for illustration. Real figures are populated by the scheduled scraper (see scraper/). Always confirm rates with the bank before acting.",
   "currency": "INR",

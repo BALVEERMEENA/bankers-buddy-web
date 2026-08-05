@@ -19,6 +19,7 @@
         <button class="tab" data-tab="fd">Deposit</button>
         <button class="tab" data-tab="sip">SIP</button>
         <button class="tab" data-tab="rates">FD Rates</button>
+        <button class="tab" data-tab="homeloan">Home Loan</button>
       </nav>
     </div>
   </header>
@@ -124,6 +125,23 @@
       <div id="rates-list" class="rates-list"></div>
 
       <p class="rates-disclaimer" id="rates-disclaimer"></p>
+    </section>
+
+    <!-- Home Loan rate comparison -->
+    <section class="panel" id="homeloan" aria-labelledby="homeloan-title">
+      <div class="rates-head">
+        <h2 id="homeloan-title">Home Loan Interest Rates</h2>
+        <div class="rates-tools">
+          <button id="homeloan-refresh" class="btn-ghost" type="button">↻ Reload</button>
+        </div>
+      </div>
+
+      <p class="rates-meta" id="homeloan-meta" aria-live="polite">Loading rates…</p>
+
+      <div id="homeloan-best" class="rates-best"></div>
+      <div id="homeloan-list" class="rates-list"></div>
+
+      <p class="rates-disclaimer" id="homeloan-disclaimer"></p>
     </section>
 
     <div class="currency-note">

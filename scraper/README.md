@@ -1,8 +1,13 @@
 # Rate scraper
 
-Fetches fixed-deposit (FD) interest rates from bank websites and writes them to
-[`../data/rates.json`](../data/rates.json), which the web app loads on the
-**FD Rates** tab.
+Fetches bank interest rates from public bank pages and writes them to JSON that
+the web app loads. It handles multiple **products**, each defined in
+[`products.js`](products.js):
+
+| Product | Output | UI tab | "Better" is |
+|---------|--------|--------|-------------|
+| Fixed Deposit | [`../data/rates.json`](../data/rates.json) | FD Rates | higher |
+| Home Loan | [`../data/home-loan-rates.json`](../data/home-loan-rates.json) | Home Loan | lower |
 
 ## How it runs
 
@@ -32,19 +37,28 @@ npm run scrape        # writes ../data/rates.json
 ## How parsing works
 
 `parse.js` avoids brittle per-bank CSS selectors. It scans every `<table>` on a
-page, scores them (biased by the `match` keyword in `banks.js`), and keeps rows
-that look like `<tenure> … <rate %> [<senior rate %>]`. This tolerates markup
-changes better than exact selectors.
+page, scores them (biased by the `match` keyword in `products.js`), and keeps
+rows that look like a rate table. This tolerates markup changes better than
+exact selectors. There are two parsers:
+
+- **`parseRates`** (FD) — keeps rows shaped `<tenure> … <rate %> [<senior %>]`.
+- **`parseHomeLoanRates`** — keeps rows shaped `<category> … <rate or range %>`,
+  reducing each to `{min, max}` (e.g. `8.50% – 9.65%`). Home-loan rows are keyed
+  by CIBIL band or borrower type rather than tenure.
 
 ## Adding / fixing a bank
 
-1. Add an entry to `banks.js` (`id`, `name`, `url`, and a `match` keyword seen
-   near the rates table).
+1. Add an entry under the relevant product in `products.js` (`id`, `name`,
+   `url`, and a `match` keyword seen near the rates table).
 2. Run `npm run scrape` and check the row count logged for that bank.
 3. If it returns **0 rows**, the page most likely renders its table with
    JavaScript. `fetch` only sees static HTML, so switch that bank to a
    headless-browser fetch (e.g. Playwright — already available in CI) that
-   returns `page.content()`, then pass it to `parseRates()`.
+   returns `page.content()`, then pass it to the product's parser.
+
+To add a whole new product (e.g. car loans, credit-card APRs), add an object to
+the array in `products.js` with its own `out` file, `better` direction, and
+`parser`, then add a matching tab in the frontend.
 
 ## Fault tolerance
 
