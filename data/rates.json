@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-08-05T16:36:56.227Z",
+  "updatedAt": "2026-08-05T16:57:40.497Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-08-05T16:36:36.818Z",
+      "fetchedAt": "2026-08-05T16:56:19.918Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -41,7 +41,7 @@
         {
           "tenure": "2 years to less than 3 years",
           "general": 6.45,
-          "senior": null
+          "senior": 6.4
         },
         {
           "tenure": "3 years to less than 5 years",
@@ -59,8 +59,102 @@
       "id": "hdfc",
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
+      "status": "live",
+      "fetchedAt": "2026-08-05T16:56:37.895Z",
+      "rates": [
+        {
+          "tenure": "7 - 14 days",
+          "general": 3.5,
+          "senior": 3.5
+        },
+        {
+          "tenure": "15-29 days",
+          "general": 3.5,
+          "senior": 3.5
+        },
+        {
+          "tenure": "30-45 days",
+          "general": 4.75,
+          "senior": 4
+        },
+        {
+          "tenure": "46-60 days",
+          "general": 5,
+          "senior": 4
+        },
+        {
+          "tenure": "61-88 days",
+          "general": 5.25,
+          "senior": 4
+        },
+        {
+          "tenure": "89 days <= 120 Days",
+          "general": 5.5,
+          "senior": 4
+        },
+        {
+          "tenure": "121 days <= 150 days",
+          "general": 5.5,
+          "senior": 4
+        },
+        {
+          "tenure": "151 days <=6 Months",
+          "general": 5.5,
+          "senior": 4
+        },
+        {
+          "tenure": "6 months 1 day <=9months",
+          "general": 5.75,
+          "senior": 4
+        },
+        {
+          "tenure": "9 months 1 day to < 1 Year",
+          "general": 6,
+          "senior": 4.25
+        },
+        {
+          "tenure": "1 Year to < 15 months",
+          "general": 6.6,
+          "senior": 4.25
+        },
+        {
+          "tenure": "15 months to < 18 months",
+          "general": 6.25,
+          "senior": 4.25
+        },
+        {
+          "tenure": "18 months to < 21 months",
+          "general": 6.4,
+          "senior": 4.25
+        },
+        {
+          "tenure": "21 months to 2 years",
+          "general": 6.4,
+          "senior": 4.25
+        },
+        {
+          "tenure": "2 year 1 day to 3 years",
+          "general": 6.6,
+          "senior": 4.25
+        },
+        {
+          "tenure": "3 year 1 day to 5 years",
+          "general": 6.6,
+          "senior": 4.25
+        },
+        {
+          "tenure": "5 year 1 day to 10 years",
+          "general": 6.6,
+          "senior": 4.25
+        }
+      ]
+    },
+    {
+      "id": "icici",
+      "name": "ICICI Bank",
+      "source": "https://www.icicibank.com/personal-banking/deposits/fixed-deposit/fd-interest-rates",
       "status": "stale",
-      "error": "HTTP 403",
+      "error": "no rate rows parsed",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
@@ -74,9 +168,9 @@
           "senior": 6.25
         },
         {
-          "tenure": "1 year to < 15 months",
-          "general": 6.6,
-          "senior": 7.1
+          "tenure": "15 months to < 18 months",
+          "general": 7.25,
+          "senior": 7.8
         },
         {
           "tenure": "2 years to < 3 years",
@@ -85,39 +179,15 @@
         },
         {
           "tenure": "5 years to 10 years",
-          "general": 7,
-          "senior": 7.75
-        }
-      ]
-    },
-    {
-      "id": "icici",
-      "name": "ICICI Bank",
-      "source": "https://www.icicibank.com/personal-banking/deposits/fixed-deposit/fd-interest-rates",
-      "status": "live",
-      "fetchedAt": "2026-08-05T16:36:41.431Z",
-      "rates": [
-        {
-          "tenure": "Less than 1 year",
-          "general": 0.5,
-          "senior": 0.5
-        },
-        {
-          "tenure": "1 year and above but < 5 years",
-          "general": 1,
-          "senior": 1
-        },
-        {
-          "tenure": "5 years and above",
-          "general": 1,
-          "senior": 1.5
+          "general": 6.9,
+          "senior": 7.65
         }
       ]
     },
     {
       "id": "axis",
       "name": "Axis Bank",
-      "source": "https://www.axisbank.com/retail/deposits/fixed-deposits/fd-interest-rate",
+      "source": "https://www.axisbank.com/interest-rate-on-deposits",
       "status": "stale",
       "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
@@ -154,17 +224,102 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-08-05T16:36:45.975Z",
+      "fetchedAt": "2026-08-05T16:56:57.294Z",
       "rates": [
         {
-          "tenure": "Greater than 180 days to less than or equal to 364 days",
-          "general": 0.5,
-          "senior": null
+          "tenure": "7 - 14 Days",
+          "general": 3.5,
+          "senior": 4.25
         },
         {
-          "tenure": "Greater than or equal to 365 days",
-          "general": 1,
-          "senior": null
+          "tenure": "15 - 30 Days",
+          "general": 3.5,
+          "senior": 4.5
+        },
+        {
+          "tenure": "31 - 45 Days",
+          "general": 4.25,
+          "senior": 4.75
+        },
+        {
+          "tenure": "46 - 60 Days",
+          "general": 4.5,
+          "senior": 5.25
+        },
+        {
+          "tenure": "61 - 90 Days",
+          "general": 4.5,
+          "senior": 6.35
+        },
+        {
+          "tenure": "91 Days",
+          "general": 5.25,
+          "senior": 6.55
+        },
+        {
+          "tenure": "92 Days - 120 Days",
+          "general": 5.5,
+          "senior": 6.65
+        },
+        {
+          "tenure": "121 Days - 179 Days",
+          "general": 5.75,
+          "senior": 6.65
+        },
+        {
+          "tenure": "180 Days",
+          "general": 6,
+          "senior": 6.65
+        },
+        {
+          "tenure": "181 Days to 270 Days",
+          "general": 6,
+          "senior": 6.7
+        },
+        {
+          "tenure": "271 Days to 279 Days",
+          "general": 5,
+          "senior": 5
+        },
+        {
+          "tenure": "280Days - 364 days",
+          "general": 6,
+          "senior": 6.75
+        },
+        {
+          "tenure": "365 days - Less Than 15Months",
+          "general": 6.6,
+          "senior": 6.9
+        },
+        {
+          "tenure": "15 months - less than 18 months",
+          "general": 6.6,
+          "senior": 6.8
+        },
+        {
+          "tenure": "18 months - less than 2 Years",
+          "general": 6.7,
+          "senior": 6.6
+        },
+        {
+          "tenure": "2 years and above but less than 3 years",
+          "general": 6.7,
+          "senior": 6.6
+        },
+        {
+          "tenure": "3 years and above but less than 4 years",
+          "general": 6.25,
+          "senior": 6.25
+        },
+        {
+          "tenure": "4 years and above but less than 5 years",
+          "general": 6.25,
+          "senior": 6.25
+        },
+        {
+          "tenure": "5 years and above upto & inclusive of 7 years",
+          "general": 6.05,
+          "senior": 6.05
         }
       ]
     },
@@ -173,107 +328,122 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-08-05T16:36:47.357Z",
+      "fetchedAt": "2026-08-05T16:57:01.807Z",
       "rates": [
         {
-          "tenure": "91 to 154 Days",
-          "general": 1,
+          "tenure": "7 to 14 Days",
+          "general": 3,
+          "senior": 3.5
+        },
+        {
+          "tenure": "15 to 45 Days",
+          "general": 3,
+          "senior": 3.5
+        },
+        {
+          "tenure": "46 to 90 Days",
+          "general": 4.5,
           "senior": 5
+        },
+        {
+          "tenure": "91 to 154 Days",
+          "general": 4.9,
+          "senior": 5.4
         },
         {
           "tenure": "155 Days",
-          "general": 2,
-          "senior": 5.65
+          "general": 5.55,
+          "senior": 6.05
         },
         {
           "tenure": "156 Days to 179 Days",
-          "general": 3,
-          "senior": 5
+          "general": 4.9,
+          "senior": 5.4
         },
         {
-          "tenure": "180 Days to 270 Days",
-          "general": 4,
-          "senior": 5.7
+          "tenure": "180 to 270 Days",
+          "general": 5.6,
+          "senior": 6.1
         },
         {
           "tenure": "271 Days to 302 Days",
-          "general": 5,
-          "senior": 5.7
+          "general": 5.6,
+          "senior": 6.1
         },
         {
           "tenure": "303 Days",
-          "general": 6,
-          "senior": null
+          "general": 5.55,
+          "senior": 6.05
         },
         {
           "tenure": "304 Days to >1 Year",
-          "general": 7,
-          "senior": null
+          "general": 5.6,
+          "senior": 6.1
         },
         {
           "tenure": "1 Year",
-          "general": 8,
-          "senior": null
+          "general": 6.25,
+          "senior": 6.75
         },
         {
           "tenure": ">1 Year to 389 Days",
-          "general": 9,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": "390 Days",
-          "general": 10,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": "391 Days to 443 Days",
-          "general": 11,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": "444 Days",
-          "general": 12,
-          "senior": null
+          "general": 6.6,
+          "senior": 7.1
         },
         {
           "tenure": "445 Days to 665 Days",
-          "general": 13,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": "666 Days",
-          "general": 14,
-          "senior": null
+          "general": 6.5,
+          "senior": 7
         },
         {
           "tenure": "667 Days to 2 Years",
-          "general": 15,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": ">2 to 3 Years",
-          "general": 16,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": ">3 Years to 1203 Days",
-          "general": 17,
-          "senior": null
+          "general": 6.35,
+          "senior": 6.85
         },
         {
           "tenure": "1204 Days",
-          "general": 18,
-          "senior": null
+          "general": 6.3,
+          "senior": 6.8
         },
         {
           "tenure": "1205 Days to 5 Years",
-          "general": 19,
-          "senior": null
+          "general": 6.35,
+          "senior": 6.85
         },
         {
           "tenure": ">5 Years to 10 Years",
-          "general": 6.1,
-          "senior": 6.9
+          "general": 6,
+          "senior": 6.8
         }
       ]
     },
@@ -282,7 +452,7 @@
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/deposits-interest-rates",
       "status": "stale",
-      "error": "no rate rows parsed",
+      "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {

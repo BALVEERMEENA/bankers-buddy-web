@@ -1,20 +1,21 @@
 #!/usr/bin/env node
 // Banker's Buddy rate scraper.
 //
-// For each product (FD, Home Loan) it fetches every configured bank page,
-// parses it, and writes ../data/<out>.json. Designed to run on a GitHub Actions
-// runner (open internet) on a schedule. It is deliberately fault-tolerant: if a
-// bank fails or yields nothing, we keep the previous known rows and mark that
-// bank "stale" instead of dropping it, so the site never loses data.
+// For each product (FD, Home Loan) it fetches every configured bank page (via a
+// headless browser when available), parses it with strict validation, and
+// writes ../data/<out>.json. Runs on a GitHub Actions runner (open internet) on
+// a schedule. Fault-tolerant: if a bank fails or its page can't be parsed into
+// plausible rows, we keep the previous rows and mark that bank "stale" (or
+// "error" if there was never any data) rather than dropping it or publishing
+// garbage — the parser only returns rows it can validate.
 
 const fs = require("fs");
 const path = require("path");
 const products = require("./products");
+const { fetchHtml, close, engine } = require("./fetch");
 
 const DATA_DIR = path.join(__dirname, "..", "data");
-const TIMEOUT_MS = 20000;
-const UA =
-  "Mozilla/5.0 (compatible; BankersBuddyBot/1.0; +https://github.com/BALVEERMEENA/bankers-buddy-web)";
+const TIMEOUT_MS = 45000;
 
 function readExisting(file) {
   try {
@@ -24,64 +25,57 @@ function readExisting(file) {
   }
 }
 
-async function fetchHtml(url) {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-  try {
-    const res = await fetch(url, {
-      signal: ctrl.signal,
-      redirect: "follow",
-      headers: { "User-Agent": UA, Accept: "text/html,*/*" },
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.text();
-  } finally {
-    clearTimeout(timer);
-  }
+function urlsFor(bank) {
+  return bank.urls || (bank.url ? [bank.url] : []);
 }
 
 async function scrapeBank(product, bank, prev) {
   const now = new Date().toISOString();
-  try {
-    const html = await fetchHtml(bank.url);
-    const rates = product.parser(html, bank.match);
-    if (!rates.length) throw new Error("no rate rows parsed");
-    console.log(`  ✓ ${bank.name}: ${rates.length} rows`);
-    return {
-      id: bank.id,
-      name: bank.name,
-      source: bank.url,
-      status: "live",
-      fetchedAt: now,
-      rates,
-    };
-  } catch (err) {
-    console.warn(`  ✗ ${bank.name}: ${err.message} — keeping previous data`);
-    return {
-      id: bank.id,
-      name: bank.name,
-      source: bank.url,
-      status: prev && prev.rates && prev.rates.length ? "stale" : "error",
-      error: err.message,
-      fetchedAt: prev ? prev.fetchedAt : now,
-      rates: prev ? prev.rates || [] : [],
-    };
+  let lastErr = "no url";
+  for (const url of urlsFor(bank)) {
+    try {
+      const html = await fetchHtml(url, TIMEOUT_MS);
+      const rates = product.parser(html, bank.match);
+      if (!rates.length) {
+        lastErr = "no rate rows parsed";
+        continue; // try next candidate URL
+      }
+      console.log(`  ✓ ${bank.name}: ${rates.length} rows`);
+      return {
+        id: bank.id,
+        name: bank.name,
+        source: url,
+        status: "live",
+        fetchedAt: now,
+        rates,
+      };
+    } catch (err) {
+      lastErr = err.message;
+    }
   }
+
+  console.warn(`  ✗ ${bank.name}: ${lastErr} — keeping previous data`);
+  return {
+    id: bank.id,
+    name: bank.name,
+    source: urlsFor(bank)[0] || (prev && prev.source),
+    status: prev && prev.rates && prev.rates.length ? "stale" : "error",
+    error: lastErr,
+    fetchedAt: prev ? prev.fetchedAt : now,
+    rates: prev ? prev.rates || [] : [],
+  };
 }
 
 async function scrapeProduct(product) {
   console.log(`\n${product.label}:`);
   const outFile = path.join(DATA_DIR, product.out);
   const existing = readExisting(outFile);
-  const prevById = Object.fromEntries(
-    (existing.banks || []).map((b) => [b.id, b])
-  );
+  const prevById = Object.fromEntries((existing.banks || []).map((b) => [b.id, b]));
 
   const results = [];
   for (const bank of product.banks) {
-    // Sequential + a small pause: gentle on the sites, avoids rate-limiting.
     results.push(await scrapeBank(product, bank, prevById[bank.id]));
-    await new Promise((r) => setTimeout(r, 800));
+    await new Promise((r) => setTimeout(r, 800)); // gentle on the sites
   }
 
   const out = {
@@ -102,8 +96,13 @@ async function scrapeProduct(product) {
 }
 
 async function main() {
-  for (const product of products) {
-    await scrapeProduct(product);
+  console.log(`Fetch engine: ${engine()}`);
+  try {
+    for (const product of products) {
+      await scrapeProduct(product);
+    }
+  } finally {
+    await close();
   }
   console.log("\nDone.");
 }

@@ -1,186 +1,216 @@
-// Generic, resilient parser for bank FD-rate tables.
+// Resilient parsers for bank rate tables, with strict validation.
 //
-// Rather than hard-coding fragile CSS selectors per bank (which break whenever
-// a site is redesigned), this scans every <table> on the page and keeps rows
-// that look like "<tenure text> ... <rate %> [<senior rate %>]". A `match`
-// keyword biases selection toward the table whose header mentions e.g.
-// "tenure"/"period"/"maturity". This tolerates markup changes far better than
-// exact selectors, at the cost of occasionally needing a tweak per-bank hint.
+// Bank pages are built very differently, so instead of hard-coded selectors we
+// analyse every <table> column-by-column and pick the column that actually
+// looks like a rate: values clustered inside a plausible band, not a
+// serial-number column, preferably with decimals. Anything that doesn't clear
+// the bar yields no rows, so the caller marks the bank unavailable rather than
+// publishing wrong numbers. This is the safeguard against "fetched but
+// mis-parsed" data (e.g. a 0.5% increment table or a 1..N serial column being
+// mistaken for interest rates).
 
 const cheerio = require("cheerio");
 
-// Matches a percentage-like number: 6.5, 6.50, 7, 7.00% ...
-const RATE_RE = /(\d{1,2}(?:\.\d{1,2})?)\s*%?/;
+// Plausible rate bands per product (annual %, general public).
+const BANDS = {
+  fd: { lo: 2.5, hi: 9.5 },
+  homeloan: { lo: 6.5, hi: 15 },
+};
 
-// A cell is "rate-like" if it is essentially just a percentage figure.
-function asRate(text) {
-  const t = String(text).trim();
-  if (!t) return null;
-  // Reject things that are clearly tenures/dates, keep short numeric cells.
-  if (/[a-z]{4,}/i.test(t) && !/%/.test(t)) return null;
-  const m = t.match(/^\s*(\d{1,2}(?:\.\d{1,2})?)\s*%?\s*$/);
-  if (!m) return null;
-  const v = parseFloat(m[1]);
-  return v > 0 && v < 20 ? v : null; // sane FD range guard
+function clean(s) {
+  return String(s).replace(/\s+/g, " ").trim();
 }
 
-// A cell is "tenure-like" if it mentions a time unit or a range.
+// Parse a lone numeric/percentage cell into a number, else null.
+function toNumber(text) {
+  const m = clean(text).match(/^(\d{1,2}(?:\.\d{1,2})?)\s*%?$/);
+  return m ? parseFloat(m[1]) : null;
+}
+
+// Does a cell describe a tenure (has a digit and a time unit)?
 function isTenure(text) {
-  const t = String(text).toLowerCase();
-  return /(day|days|month|months|year|years|yr|d\b)/.test(t) && /\d/.test(t);
+  const t = clean(text).toLowerCase();
+  return /\d/.test(t) && /(day|days|month|months|year|years|yr|mth|mos)/.test(t);
 }
 
-function tableScore($, table, match) {
-  const header = $(table).find("th").text().toLowerCase();
-  const body = $(table).text().toLowerCase();
-  let score = 0;
-  if (match && header.includes(match)) score += 5;
-  if (match && body.includes(match)) score += 1;
-  if (/%/.test(body)) score += 1;
-  if (/(interest|rate)/.test(body)) score += 1;
-  score += Math.min(4, $(table).find("tr").length / 5); // prefer real tables
-  return score;
-}
-
-function parseTable($, table) {
+// Extract a table as a grid of trimmed <td> strings (skips header-only rows).
+function grid($, table) {
   const rows = [];
   $(table)
     .find("tr")
     .each((_, tr) => {
       const cells = $(tr)
         .find("td")
-        .map((__, td) => $(td).text().replace(/\s+/g, " ").trim())
+        .map((__, td) => clean($(td).text()))
         .get();
-      if (cells.length < 2) return;
-
-      const tenureCell = cells.find(isTenure);
-      if (!tenureCell) return;
-
-      const rates = cells.map(asRate).filter((v) => v !== null);
-      if (!rates.length) return;
-
-      rows.push({
-        tenure: tenureCell,
-        general: rates[0],
-        // Heuristic: a second, higher figure is usually the senior-citizen rate.
-        senior: rates.length > 1 && rates[1] >= rates[0] ? rates[1] : null,
-      });
+      if (cells.length) rows.push(cells);
     });
   return rows;
 }
 
-/**
- * Parse FD rates out of a page's HTML.
- * @param {string} html
- * @param {string} [match] lowercase keyword hint for the right table
- * @returns {Array<{tenure:string, general:number, senior:number|null}>}
- */
-function parseRates(html, match) {
-  const $ = cheerio.load(html);
-  const tables = $("table").toArray();
-  if (!tables.length) return [];
+// A column that is a consecutive-integer run (1,2,3,…) is a serial/index
+// column, never a rate column.
+function looksSerial(nums) {
+  const ints = nums.filter((n) => Number.isInteger(n));
+  if (ints.length < Math.max(4, nums.length * 0.7)) return false;
+  const s = [...ints].sort((a, b) => a - b);
+  let consec = 0;
+  for (let i = 1; i < s.length; i++) if (s[i] - s[i - 1] === 1) consec++;
+  return consec >= (s.length - 1) * 0.6;
+}
 
-  tables.sort((a, b) => tableScore($, b, match) - tableScore($, a, match));
-
-  // Try tables best-first until one yields plausible rows.
-  for (const table of tables) {
-    const rows = parseTable($, table);
-    if (rows.length >= 2) return rows;
+function columnNumbers(g, col) {
+  const nums = [];
+  for (const r of g) {
+    if (col < r.length) {
+      const n = toNumber(r[col]);
+      if (n != null) nums.push(n);
+    }
   }
-  return [];
+  return nums;
+}
+
+// Score a column as a candidate rate column for a band.
+function rateColumnScore(g, col, band) {
+  const nums = columnNumbers(g, col);
+  if (!nums.length || looksSerial(nums)) return { score: -1, nums };
+  const inBand = nums.filter((n) => n >= band.lo && n <= band.hi).length;
+  if (inBand / nums.length < 0.5) return { score: -1, nums };
+  const hasDecimal = nums.some((n) => !Number.isInteger(n));
+  return { score: inBand + (hasDecimal ? 2 : 0), nums };
+}
+
+function ncols(g) {
+  return g.reduce((m, r) => Math.max(m, r.length), 0);
+}
+
+function tableMentions($, table, match) {
+  return match ? $(table).text().toLowerCase().includes(match) : false;
 }
 
 // ---------------------------------------------------------------------------
-// Home-loan parser
-//
-// Home-loan pages differ from FD pages: rows are keyed by a borrower category
-// (CIBIL band, salaried/self-employed, or loan slab) and the rate is usually a
-// range like "8.50% - 9.65%". We pull the label cell plus every rate figure in
-// the row, then reduce to {min, max}.
+// Fixed deposit: rows are <tenure> + <general %> [+ <senior %>].
+function parseRates(html, match) {
+  const $ = cheerio.load(html);
+  const band = BANDS.fd;
+  let best = null;
 
-// Plausible home-loan rate band (%). Filters out loan amounts/tenures/scores.
-const HL_MIN = 5;
-const HL_MAX = 18;
+  for (const table of $("table").toArray()) {
+    const g = grid($, table);
+    if (g.length < 3) continue;
+    const cols = ncols(g);
 
-// Extract rate figures from a row's text. Prefer numbers written with a % sign;
-// fall back to bare in-band numbers only if none carry a %.
-function extractLoanRates(text) {
-  const t = String(text);
-  const withPct = [];
-  let m;
-  const pctRe = /(\d{1,2}(?:\.\d{1,2})?)\s*%/g;
-  while ((m = pctRe.exec(t))) {
-    const v = parseFloat(m[1]);
-    if (v >= HL_MIN && v <= HL_MAX) withPct.push(v);
+    // Tenure column = the one with the most tenure-like cells.
+    let tenureCol = -1;
+    let tenureHits = 0;
+    for (let c = 0; c < cols; c++) {
+      let s = 0;
+      for (const r of g) if (c < r.length && isTenure(r[c])) s++;
+      if (s > tenureHits) {
+        tenureHits = s;
+        tenureCol = c;
+      }
+    }
+    if (tenureCol < 0 || tenureHits < 3) continue;
+
+    // General rate column = best-scoring rate column that isn't the tenure col.
+    let genCol = -1;
+    let genScore = 2;
+    for (let c = 0; c < cols; c++) {
+      if (c === tenureCol) continue;
+      const { score } = rateColumnScore(g, c, band);
+      if (score > genScore) {
+        genScore = score;
+        genCol = c;
+      }
+    }
+    if (genCol < 0) continue;
+
+    // Senior column = next-best rate column (optional).
+    let senCol = -1;
+    let senScore = 0;
+    for (let c = 0; c < cols; c++) {
+      if (c === tenureCol || c === genCol) continue;
+      const { score } = rateColumnScore(g, c, band);
+      if (score > senScore) {
+        senScore = score;
+        senCol = c;
+      }
+    }
+
+    const rows = [];
+    for (const r of g) {
+      if (tenureCol >= r.length || genCol >= r.length) continue;
+      if (!isTenure(r[tenureCol])) continue;
+      const gen = toNumber(r[genCol]);
+      if (gen == null || gen < band.lo || gen > band.hi) continue;
+      let sen = null;
+      if (senCol >= 0 && senCol < r.length) {
+        const sv = toNumber(r[senCol]);
+        if (sv != null && sv >= band.lo && sv <= band.hi) sen = sv;
+      }
+      rows.push({ tenure: r[tenureCol], general: gen, senior: sen });
+    }
+
+    if (rows.length < 3) continue;
+    const score = rows.length + (tableMentions($, table, match) ? 3 : 0);
+    if (!best || score > best.score) best = { rows, score };
   }
-  if (withPct.length) return withPct;
 
-  const bare = [];
-  const bareRe = /(\d{1,2}\.\d{1,2})/g; // require a decimal to avoid scores/slabs
-  while ((m = bareRe.exec(t))) {
-    const v = parseFloat(m[1]);
-    if (v >= HL_MIN && v <= HL_MAX) bare.push(v);
-  }
-  return bare;
+  return best ? best.rows : [];
 }
 
-// A lone rate figure, e.g. "8.45%" or "8.45" — used to exclude rate cells.
-function isRateCell(text) {
-  const t = String(text).trim();
-  return /^\d{1,2}(?:\.\d{1,2})?\s*%$/.test(t) || /^\d{1,2}\.\d{1,2}$/.test(t);
-}
+// ---------------------------------------------------------------------------
+// Home loan: rows are <category> + one or more <rate %> (a range → min/max).
+function parseHomeLoanRates(html, match) {
+  const $ = cheerio.load(html);
+  const band = BANDS.homeloan;
+  let best = null;
 
-// A category label: any non-empty cell that isn't itself just a rate figure.
-// Accepts text ("Salaried"), CIBIL bands ("750 - 799"), and slabs ("Up to 30L").
-function isCategory(text) {
-  const t = String(text).trim();
-  return t.length > 1 && !isRateCell(t);
-}
+  for (const table of $("table").toArray()) {
+    const g = grid($, table);
+    if (!g.length) continue;
+    const cols = ncols(g);
 
-function parseLoanTable($, table) {
-  const rows = [];
-  $(table)
-    .find("tr")
-    .each((_, tr) => {
-      const cells = $(tr)
-        .find("td")
-        .map((__, td) => $(td).text().replace(/\s+/g, " ").trim())
-        .get();
-      if (cells.length < 2) return;
+    // Category column = the one with the most text (non-rate) cells.
+    let catCol = -1;
+    let catHits = 0;
+    for (let c = 0; c < cols; c++) {
+      let s = 0;
+      for (const r of g)
+        if (c < r.length && r[c] && /[a-z]/i.test(r[c]) && toNumber(r[c]) == null) s++;
+      if (s > catHits) {
+        catHits = s;
+        catCol = c;
+      }
+    }
 
-      const category = cells.find(isCategory);
-      if (!category) return;
-
-      const rates = extractLoanRates(cells.join(" "));
-      if (!rates.length) return;
-
+    const rows = [];
+    for (const r of g) {
+      const rates = [];
+      for (let c = 0; c < r.length; c++) {
+        if (c === catCol) continue;
+        const n = toNumber(r[c]);
+        if (n != null && n >= band.lo && n <= band.hi) rates.push(n);
+      }
+      if (!rates.length) continue;
+      let cat = catCol >= 0 && catCol < r.length ? r[catCol] : null;
+      if (!cat) cat = r.find((x) => x && toNumber(x) == null) || r[0];
+      if (!cat) continue;
       rows.push({
-        category: category,
+        category: clean(cat),
         min: Math.min.apply(null, rates),
         max: Math.max.apply(null, rates),
       });
-    });
-  return rows;
-}
+    }
 
-/**
- * Parse home-loan rates out of a page's HTML.
- * @param {string} html
- * @param {string} [match] lowercase keyword hint for the right table
- * @returns {Array<{category:string, min:number, max:number}>}
- */
-function parseHomeLoanRates(html, match) {
-  const $ = cheerio.load(html);
-  const tables = $("table").toArray();
-  if (!tables.length) return [];
-
-  tables.sort((a, b) => tableScore($, b, match) - tableScore($, a, match));
-
-  for (const table of tables) {
-    const rows = parseLoanTable($, table);
-    if (rows.length >= 1) return rows;
+    if (!rows.length) continue;
+    if (looksSerial(rows.map((x) => x.min))) continue; // reject serial garbage
+    const score = rows.length + (tableMentions($, table, match) ? 3 : 0);
+    if (!best || score > best.score) best = { rows, score };
   }
-  return [];
+
+  return best ? best.rows : [];
 }
 
-module.exports = { parseRates, parseHomeLoanRates, asRate, isTenure };
+module.exports = { parseRates, parseHomeLoanRates, toNumber, isTenure, looksSerial };

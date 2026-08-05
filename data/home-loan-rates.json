@@ -2,14 +2,14 @@
   "product": "homeloan",
   "label": "Home Loan",
   "better": "lower",
-  "updatedAt": "2026-08-05T16:37:33.648Z",
+  "updatedAt": "2026-08-05T16:58:59.417Z",
   "disclaimer": "Home-loan rates are scraped from public bank pages; the applicable rate depends on your CIBIL score, loan amount, and profile. Confirm the exact rate with the bank.",
   "currency": "INR",
   "banks": [
     {
       "id": "sbi",
       "name": "State Bank of India",
-      "source": "https://sbi.co.in/web/personal-banking/loans/home-loans/home-loan",
+      "source": "https://sbi.co.in/web/personal-banking/loans/home-loans/interest-rates",
       "status": "stale",
       "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
@@ -41,7 +41,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/borrow/popular-loans/home-loan/home-loan-interest-rates",
       "status": "stale",
-      "error": "This operation was aborted",
+      "error": "HTTP 403",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
@@ -56,34 +56,24 @@
       "name": "ICICI Bank",
       "source": "https://www.icicibank.com/personal-banking/loans/home-loan/interest-rates",
       "status": "live",
-      "fetchedAt": "2026-08-05T16:37:19.666Z",
+      "fetchedAt": "2026-08-05T16:57:46.343Z",
       "rates": [
         {
-          "category": "24 Months",
-          "min": 9.1,
-          "max": 9.15
+          "category": "800",
+          "min": 8.5,
+          "max": 8.5
         },
         {
-          "category": "37 Months",
-          "min": 8.9,
-          "max": 9.15
-        },
-        {
-          "category": "120 Months",
-          "min": 10.5,
-          "max": 10.6
-        },
-        {
-          "category": "Full Term",
-          "min": 10.9,
-          "max": 11.2
+          "category": "750 – 800",
+          "min": 8.5,
+          "max": 8.6
         }
       ]
     },
     {
       "id": "axis",
       "name": "Axis Bank",
-      "source": "https://www.axisbank.com/retail/loans/home-loan/axis-bank-home-loan/interest-rate-and-charges",
+      "source": "https://www.axisbank.com/retail/loans/home-loan/interest-rate",
       "status": "stale",
       "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
@@ -98,7 +88,7 @@
     {
       "id": "kotak",
       "name": "Kotak Mahindra Bank",
-      "source": "https://www.kotak.com/en/personal-banking/loans/home-loan/interest-rates-and-charges.html",
+      "source": "https://www.kotak.com/en/personal-banking/loans/home-loan.html",
       "status": "stale",
       "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
@@ -168,7 +158,7 @@
     {
       "id": "bob",
       "name": "Bank of Baroda",
-      "source": "https://www.bankofbaroda.in/personal-banking/loans/home-loan",
+      "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/loans-advances-interest-rate",
       "status": "stale",
       "error": "no rate rows parsed",
       "fetchedAt": "2026-08-05T00:00:00Z",

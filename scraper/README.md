@@ -34,17 +34,34 @@ npm run scrape        # writes ../data/rates.json
 > block outbound requests to bank domains, so the scrape will fail there and
 > the seeded sample data is kept.
 
+## How fetching works
+
+`fetch.js` prefers a real **headless browser (Playwright/Chromium)** so
+JavaScript-rendered rate tables actually appear and requests look like a genuine
+browser — which also gets past many `403`/`406` bot blocks. If Playwright isn't
+installed (e.g. a restricted sandbox) it falls back to plain `fetch`, so the
+scraper still runs, just without JS rendering. CI installs Chromium via
+`npx playwright install --with-deps chromium`.
+
+Each bank may list several candidate `urls`; the scraper tries them in order and
+keeps the first that yields **validated** rows, so one changed/wrong URL is not
+fatal.
+
 ## How parsing works
 
-`parse.js` avoids brittle per-bank CSS selectors. It scans every `<table>` on a
-page, scores them (biased by the `match` keyword in `products.js`), and keeps
-rows that look like a rate table. This tolerates markup changes better than
-exact selectors. There are two parsers:
+`parse.js` avoids brittle per-bank CSS selectors. It analyses every `<table>`
+**column by column** and only accepts a column as a rate column when its values
+cluster inside a plausible band (FD `2.5–9.5%`, home loan `6.5–15%`), aren't a
+serial/index sequence (`1,2,3…`), and ideally carry decimals. If nothing clears
+the bar it returns **no rows**, and the caller marks the bank *unavailable*
+rather than publishing wrong numbers. This is the safeguard against
+"fetched but mis-parsed" data — e.g. a `0.50%` increment table or a serial
+column being mistaken for interest rates. Two parsers:
 
-- **`parseRates`** (FD) — keeps rows shaped `<tenure> … <rate %> [<senior %>]`.
-- **`parseHomeLoanRates`** — keeps rows shaped `<category> … <rate or range %>`,
-  reducing each to `{min, max}` (e.g. `8.50% – 9.65%`). Home-loan rows are keyed
-  by CIBIL band or borrower type rather than tenure.
+- **`parseRates`** (FD) — rows shaped `<tenure> … <general %> [<senior %>]`.
+- **`parseHomeLoanRates`** — rows shaped `<category> … <rate or range %>`,
+  reduced to `{min, max}` (e.g. `8.50% – 9.65%`), keyed by CIBIL band or
+  borrower type rather than tenure.
 
 ## Adding / fixing a bank
 

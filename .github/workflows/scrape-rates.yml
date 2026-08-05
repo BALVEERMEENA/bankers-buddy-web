@@ -23,6 +23,10 @@ jobs:
         working-directory: scraper
         run: npm ci || npm install
 
+      - name: Install Chromium for Playwright
+        working-directory: scraper
+        run: npx playwright install --with-deps chromium
+
       - name: Run scraper
         working-directory: scraper
         run: npm run scrape
