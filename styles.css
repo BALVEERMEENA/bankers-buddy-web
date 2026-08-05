@@ -156,6 +156,136 @@ body {
 .result-row span { color: var(--muted); }
 .result-row strong { font-weight: 700; }
 
+/* FD Rates */
+.rates-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.rates-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+label.inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+label.inline select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  font-family: inherit;
+}
+.btn-ghost {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.btn-ghost:hover { border-color: var(--accent); }
+
+.rates-meta { color: var(--muted); font-size: 0.9rem; margin: 0.5rem 0 1rem; }
+
+.rates-best {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 560px) { .rates-best { grid-template-columns: 1fr; } }
+.best-card {
+  background: linear-gradient(160deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  display: grid;
+  gap: 0.15rem;
+}
+.best-medal { font-size: 1.1rem; }
+.best-rate { font-size: 1.7rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+.best-bank { font-weight: 700; }
+.best-tenure { color: var(--muted); font-size: 0.8rem; }
+
+.rates-list { display: grid; gap: 0.6rem; }
+.bank-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.bank-card summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.98rem;
+}
+.bank-card summary::-webkit-details-marker { display: none; }
+.bank-name { font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; }
+.bank-top { color: var(--muted); font-size: 0.9rem; }
+.bank-top strong { color: var(--accent); }
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.badge.live { color: #052e16; background: #4ade80; border-color: #4ade80; }
+.badge.stale { color: #451a03; background: #fbbf24; border-color: #fbbf24; }
+.badge.error { color: #450a0a; background: #f87171; border-color: #f87171; }
+.badge.sample { color: #082f49; background: #7dd3fc; border-color: #7dd3fc; }
+
+.table-scroll { overflow-x: auto; }
+.rate-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.rate-table th, .rate-table td {
+  text-align: left;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border);
+  white-space: nowrap;
+}
+.rate-table th { color: var(--muted); font-weight: 600; }
+.rate-table td:nth-child(2), .rate-table td:nth-child(3) { font-weight: 700; }
+.bank-source {
+  display: inline-block;
+  padding: 0.6rem 1rem 0.85rem;
+  color: var(--accent);
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+.bank-source:hover { text-decoration: underline; }
+
+.rates-disclaimer {
+  margin: 1.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
 .currency-note {
   margin: 1.5rem 0;
   color: var(--muted);

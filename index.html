@@ -14,10 +14,11 @@
         <span class="brand-mark" aria-hidden="true">🏦</span>
         <span class="brand-name">Banker's Buddy</span>
       </a>
-      <nav class="tabs" aria-label="Calculators">
+      <nav class="tabs" aria-label="Sections">
         <button class="tab is-active" data-tab="emi">Loan / EMI</button>
         <button class="tab" data-tab="fd">Deposit</button>
         <button class="tab" data-tab="sip">SIP</button>
+        <button class="tab" data-tab="rates">FD Rates</button>
       </nav>
     </div>
   </header>
@@ -100,6 +101,29 @@
           <div class="result-row"><span>Estimated gains</span><strong id="sip-gains">—</strong></div>
         </div>
       </div>
+    </section>
+
+    <!-- FD Rates comparison -->
+    <section class="panel" id="rates" aria-labelledby="rates-title">
+      <div class="rates-head">
+        <h2 id="rates-title">Bank FD Interest Rates</h2>
+        <div class="rates-tools">
+          <label class="inline">Show
+            <select id="rates-audience">
+              <option value="general" selected>General public</option>
+              <option value="senior">Senior citizen</option>
+            </select>
+          </label>
+          <button id="rates-refresh" class="btn-ghost" type="button">↻ Reload</button>
+        </div>
+      </div>
+
+      <p class="rates-meta" id="rates-meta" aria-live="polite">Loading rates…</p>
+
+      <div id="rates-best" class="rates-best"></div>
+      <div id="rates-list" class="rates-list"></div>
+
+      <p class="rates-disclaimer" id="rates-disclaimer"></p>
     </section>
 
     <div class="currency-note">

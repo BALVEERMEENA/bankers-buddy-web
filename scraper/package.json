@@ -1,0 +1,16 @@
+{
+  "name": "bankers-buddy-scraper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scrapes FD interest rates from bank websites into data/rates.json",
+  "type": "commonjs",
+  "scripts": {
+    "scrape": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}

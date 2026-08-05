@@ -28,11 +28,33 @@ python3 -m http.server 8000
 - **Deposit** — compound-interest maturity value for fixed/recurring deposits,
   with yearly, half-yearly, quarterly, or monthly compounding.
 - **SIP** — projected value of a monthly recurring investment.
+- **FD Rates** — compare fixed-deposit interest rates across major banks, with a
+  best-rate leaderboard and a general/senior-citizen toggle.
 - Switch display currency (₹ INR, $ USD, £ GBP, € EUR).
+
+## Live bank rates
+
+The **FD Rates** tab reads [`data/rates.json`](data/rates.json). Because banks
+don't offer CORS-friendly APIs, the browser can't fetch them directly — instead
+a small Node scraper (see [`scraper/`](scraper/)) runs daily on **GitHub
+Actions**, parses each bank's rates page, and commits an updated `rates.json`.
+The site then just loads that file.
+
+The repo ships with **sample data** (marked `SAMPLE` in the UI) so the tab works
+immediately; real figures appear once the scheduled scraper runs. To refresh on
+demand, trigger the *"Scrape bank FD rates"* workflow, or run it locally:
+
+```bash
+cd scraper && npm install && npm run scrape
+```
+
+> The FD Rates tab uses `fetch`, which is blocked on `file://`. Serve the site
+> (`python3 -m http.server`) to view that tab locally.
 
 ## Tech
 
-Plain HTML, CSS, and vanilla JavaScript — no dependencies, no build step, no
-tracking. `index.html`, `styles.css`, and `app.js` are all you need.
+Plain HTML, CSS, and vanilla JavaScript for the site — no dependencies, no build
+step, no tracking. The optional scraper is a small Node script (`cheerio`).
+`index.html`, `styles.css`, and `app.js` are all the app itself needs.
 
 > Figures are estimates for guidance only and are not financial advice.
