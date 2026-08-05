@@ -1,0 +1,108 @@
+{
+  "product": "fd",
+  "label": "Fixed Deposit",
+  "better": "higher",
+  "updatedAt": "2026-08-05T00:00:00Z",
+  "disclaimer": "SAMPLE DATA for illustration. Real figures are populated by the scheduled scraper (see scraper/). Always confirm rates with the bank before acting.",
+  "currency": "INR",
+  "banks": [
+    {
+      "id": "sbi",
+      "name": "State Bank of India",
+      "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 45 days", "general": 3.5, "senior": 4.0 },
+        { "tenure": "180 days to 210 days", "general": 5.75, "senior": 6.25 },
+        { "tenure": "1 year to < 2 years", "general": 6.8, "senior": 7.3 },
+        { "tenure": "2 years to < 3 years", "general": 7.0, "senior": 7.5 },
+        { "tenure": "5 years to 10 years", "general": 6.5, "senior": 7.5 }
+      ]
+    },
+    {
+      "id": "hdfc",
+      "name": "HDFC Bank",
+      "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 29 days", "general": 3.0, "senior": 3.5 },
+        { "tenure": "6 months to < 9 months", "general": 5.75, "senior": 6.25 },
+        { "tenure": "1 year to < 15 months", "general": 6.6, "senior": 7.1 },
+        { "tenure": "2 years to < 3 years", "general": 7.0, "senior": 7.5 },
+        { "tenure": "5 years to 10 years", "general": 7.0, "senior": 7.75 }
+      ]
+    },
+    {
+      "id": "icici",
+      "name": "ICICI Bank",
+      "source": "https://www.icicibank.com/personal-banking/deposits/fixed-deposit/fd-interest-rates",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 29 days", "general": 3.0, "senior": 3.5 },
+        { "tenure": "6 months to < 9 months", "general": 5.75, "senior": 6.25 },
+        { "tenure": "15 months to < 18 months", "general": 7.25, "senior": 7.8 },
+        { "tenure": "2 years to < 3 years", "general": 7.0, "senior": 7.5 },
+        { "tenure": "5 years to 10 years", "general": 6.9, "senior": 7.65 }
+      ]
+    },
+    {
+      "id": "axis",
+      "name": "Axis Bank",
+      "source": "https://www.axisbank.com/retail/deposits/fixed-deposits/fd-interest-rate",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 14 days", "general": 3.0, "senior": 3.5 },
+        { "tenure": "6 months to < 7 months", "general": 5.75, "senior": 6.25 },
+        { "tenure": "1 year to < 15 months", "general": 6.7, "senior": 7.2 },
+        { "tenure": "2 years to < 30 months", "general": 7.1, "senior": 7.6 },
+        { "tenure": "5 years to 10 years", "general": 7.0, "senior": 7.75 }
+      ]
+    },
+    {
+      "id": "kotak",
+      "name": "Kotak Mahindra Bank",
+      "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 30 days", "general": 2.75, "senior": 3.25 },
+        { "tenure": "6 months to < 9 months", "general": 6.0, "senior": 6.5 },
+        { "tenure": "1 year to < 15 months", "general": 7.1, "senior": 7.6 },
+        { "tenure": "2 years to < 3 years", "general": 7.0, "senior": 7.5 },
+        { "tenure": "5 years to 10 years", "general": 6.2, "senior": 6.7 }
+      ]
+    },
+    {
+      "id": "pnb",
+      "name": "Punjab National Bank",
+      "source": "https://www.pnbindia.in/interest-rates-deposit.html",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 14 days", "general": 3.5, "senior": 4.0 },
+        { "tenure": "180 days to 270 days", "general": 6.0, "senior": 6.5 },
+        { "tenure": "1 year", "general": 6.8, "senior": 7.3 },
+        { "tenure": "2 years to < 3 years", "general": 6.9, "senior": 7.4 },
+        { "tenure": "5 years to 10 years", "general": 6.5, "senior": 7.3 }
+      ]
+    },
+    {
+      "id": "bob",
+      "name": "Bank of Baroda",
+      "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/deposits-interest-rates",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
+      "rates": [
+        { "tenure": "7 days to 14 days", "general": 3.0, "senior": 3.5 },
+        { "tenure": "180 days to 210 days", "general": 5.75, "senior": 6.25 },
+        { "tenure": "1 year", "general": 6.85, "senior": 7.35 },
+        { "tenure": "2 years to < 3 years", "general": 7.15, "senior": 7.65 },
+        { "tenure": "5 years to 10 years", "general": 6.5, "senior": 7.4 }
+      ]
+    }
+  ]
+}

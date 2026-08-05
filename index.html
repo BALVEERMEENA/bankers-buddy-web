@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Banker's Buddy — free, private banking calculators for loans, deposits and SIP investments. Everything runs in your browser." />
+  <title>Banker's Buddy — Your everyday banking calculators</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="#top" id="top">
+        <span class="brand-mark" aria-hidden="true">🏦</span>
+        <span class="brand-name">Banker's Buddy</span>
+      </a>
+      <nav class="tabs" aria-label="Sections">
+        <button class="tab is-active" data-tab="emi">Loan / EMI</button>
+        <button class="tab" data-tab="fd">Deposit</button>
+        <button class="tab" data-tab="sip">SIP</button>
+        <button class="tab" data-tab="rates">FD Rates</button>
+        <button class="tab" data-tab="homeloan">Home Loan</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="tagline">Quick, private banking math. Nothing you type ever leaves your browser.</p>
+
+    <!-- EMI / Loan -->
+    <section class="panel is-active" id="emi" aria-labelledby="emi-title">
+      <h2 id="emi-title">Loan &amp; EMI Calculator</h2>
+      <div class="grid">
+        <div class="controls">
+          <label>Loan amount
+            <input type="number" id="emi-principal" value="500000" min="0" step="1000" />
+          </label>
+          <label>Annual interest rate (%)
+            <input type="number" id="emi-rate" value="9" min="0" step="0.1" />
+          </label>
+          <label>Tenure (years)
+            <input type="number" id="emi-years" value="5" min="0" step="1" />
+          </label>
+        </div>
+        <div class="results" id="emi-results" aria-live="polite">
+          <div class="result-big"><span class="result-label">Monthly EMI</span><strong id="emi-monthly">—</strong></div>
+          <div class="result-row"><span>Total interest</span><strong id="emi-interest">—</strong></div>
+          <div class="result-row"><span>Total payment</span><strong id="emi-total">—</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fixed Deposit -->
+    <section class="panel" id="fd" aria-labelledby="fd-title">
+      <h2 id="fd-title">Deposit / Compound Interest</h2>
+      <div class="grid">
+        <div class="controls">
+          <label>Principal
+            <input type="number" id="fd-principal" value="100000" min="0" step="1000" />
+          </label>
+          <label>Annual interest rate (%)
+            <input type="number" id="fd-rate" value="7" min="0" step="0.1" />
+          </label>
+          <label>Tenure (years)
+            <input type="number" id="fd-years" value="3" min="0" step="0.5" />
+          </label>
+          <label>Compounding
+            <select id="fd-freq">
+              <option value="1">Yearly</option>
+              <option value="2">Half-yearly</option>
+              <option value="4" selected>Quarterly</option>
+              <option value="12">Monthly</option>
+            </select>
+          </label>
+        </div>
+        <div class="results" id="fd-results" aria-live="polite">
+          <div class="result-big"><span class="result-label">Maturity value</span><strong id="fd-maturity">—</strong></div>
+          <div class="result-row"><span>Interest earned</span><strong id="fd-earned">—</strong></div>
+          <div class="result-row"><span>Principal</span><strong id="fd-base">—</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIP -->
+    <section class="panel" id="sip" aria-labelledby="sip-title">
+      <h2 id="sip-title">SIP / Recurring Investment</h2>
+      <div class="grid">
+        <div class="controls">
+          <label>Monthly investment
+            <input type="number" id="sip-amount" value="5000" min="0" step="500" />
+          </label>
+          <label>Expected annual return (%)
+            <input type="number" id="sip-rate" value="12" min="0" step="0.1" />
+          </label>
+          <label>Duration (years)
+            <input type="number" id="sip-years" value="10" min="0" step="1" />
+          </label>
+        </div>
+        <div class="results" id="sip-results" aria-live="polite">
+          <div class="result-big"><span class="result-label">Estimated value</span><strong id="sip-value">—</strong></div>
+          <div class="result-row"><span>Total invested</span><strong id="sip-invested">—</strong></div>
+          <div class="result-row"><span>Estimated gains</span><strong id="sip-gains">—</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FD Rates comparison -->
+    <section class="panel" id="rates" aria-labelledby="rates-title">
+      <div class="rates-head">
+        <h2 id="rates-title">Bank FD Interest Rates</h2>
+        <div class="rates-tools">
+          <label class="inline">Show
+            <select id="rates-audience">
+              <option value="general" selected>General public</option>
+              <option value="senior">Senior citizen</option>
+            </select>
+          </label>
+          <button id="rates-refresh" class="btn-ghost" type="button">↻ Reload</button>
+        </div>
+      </div>
+
+      <p class="rates-meta" id="rates-meta" aria-live="polite">Loading rates…</p>
+
+      <div id="rates-best" class="rates-best"></div>
+      <div id="rates-list" class="rates-list"></div>
+
+      <p class="rates-disclaimer" id="rates-disclaimer"></p>
+    </section>
+
+    <!-- Home Loan rate comparison -->
+    <section class="panel" id="homeloan" aria-labelledby="homeloan-title">
+      <div class="rates-head">
+        <h2 id="homeloan-title">Home Loan Interest Rates</h2>
+        <div class="rates-tools">
+          <button id="homeloan-refresh" class="btn-ghost" type="button">↻ Reload</button>
+        </div>
+      </div>
+
+      <p class="rates-meta" id="homeloan-meta" aria-live="polite">Loading rates…</p>
+
+      <div id="homeloan-best" class="rates-best"></div>
+      <div id="homeloan-list" class="rates-list"></div>
+
+      <p class="rates-disclaimer" id="homeloan-disclaimer"></p>
+    </section>
+
+    <div class="currency-note">
+      Amounts are shown in
+      <select id="currency">
+        <option value="en-IN|INR" selected>₹ INR</option>
+        <option value="en-US|USD">$ USD</option>
+        <option value="en-GB|GBP">£ GBP</option>
+        <option value="de-DE|EUR">€ EUR</option>
+      </select>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Banker's Buddy runs entirely in your browser — no data is sent anywhere. Figures are estimates for guidance only, not financial advice.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
