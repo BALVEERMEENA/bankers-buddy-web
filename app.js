@@ -243,6 +243,13 @@
     cfg.loaded = true;
     var meta = document.getElementById(key + "-meta");
     meta.textContent = "Loading rates…";
+    // Self-contained builds (e.g. a single-file snapshot) embed the datasets
+    // on window.BANKERS_DATA so the page works with no network at all.
+    if (window.BANKERS_DATA && window.BANKERS_DATA[key]) {
+      cfg.data = window.BANKERS_DATA[key];
+      renderPanel(key);
+      return;
+    }
     fetch(cfg.file, { cache: force ? "reload" : "default" })
       .then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
