@@ -2,192 +2,99 @@
   "product": "homeloan",
   "label": "Home Loan",
   "better": "lower",
-  "updatedAt": "2026-08-05T16:37:33.648Z",
-  "disclaimer": "Home-loan rates are scraped from public bank pages; the applicable rate depends on your CIBIL score, loan amount, and profile. Confirm the exact rate with the bank.",
+  "updatedAt": "2026-08-05T00:00:00Z",
+  "disclaimer": "SAMPLE DATA for illustration. The applicable rate depends on your CIBIL score, loan amount, and profile. Real figures are populated by the scheduled scraper (see scraper/). Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
     {
       "id": "sbi",
       "name": "State Bank of India",
       "source": "https://sbi.co.in/web/personal-banking/loans/home-loans/home-loan",
-      "status": "stale",
-      "error": "HTTP 404",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "CIBIL 800 and above",
-          "min": 8.4,
-          "max": 8.4
-        },
-        {
-          "category": "CIBIL 750 - 799",
-          "min": 8.5,
-          "max": 8.5
-        },
-        {
-          "category": "CIBIL 700 - 749",
-          "min": 8.6,
-          "max": 8.7
-        },
-        {
-          "category": "CIBIL up to 649",
-          "min": 9.15,
-          "max": 9.15
-        }
+        { "category": "CIBIL 800 and above", "min": 8.4, "max": 8.4 },
+        { "category": "CIBIL 750 - 799", "min": 8.5, "max": 8.5 },
+        { "category": "CIBIL 700 - 749", "min": 8.6, "max": 8.7 },
+        { "category": "CIBIL up to 649", "min": 9.15, "max": 9.15 }
       ]
     },
     {
       "id": "hdfc",
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/borrow/popular-loans/home-loan/home-loan-interest-rates",
-      "status": "stale",
-      "error": "This operation was aborted",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "Salaried & self-employed",
-          "min": 8.5,
-          "max": 9.4
-        }
+        { "category": "Salaried & self-employed", "min": 8.5, "max": 9.4 }
       ]
     },
     {
       "id": "icici",
       "name": "ICICI Bank",
       "source": "https://www.icicibank.com/personal-banking/loans/home-loan/interest-rates",
-      "status": "live",
-      "fetchedAt": "2026-08-05T16:37:19.666Z",
+      "status": "sample",
+      "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "24 Months",
-          "min": 9.1,
-          "max": 9.15
-        },
-        {
-          "category": "37 Months",
-          "min": 8.9,
-          "max": 9.15
-        },
-        {
-          "category": "120 Months",
-          "min": 10.5,
-          "max": 10.6
-        },
-        {
-          "category": "Full Term",
-          "min": 10.9,
-          "max": 11.2
-        }
+        { "category": "Salaried", "min": 8.75, "max": 9.6 },
+        { "category": "Self-employed", "min": 8.9, "max": 9.8 }
       ]
     },
     {
       "id": "axis",
       "name": "Axis Bank",
       "source": "https://www.axisbank.com/retail/loans/home-loan/axis-bank-home-loan/interest-rate-and-charges",
-      "status": "stale",
-      "error": "HTTP 404",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "Floating rate",
-          "min": 8.75,
-          "max": 9.65
-        }
+        { "category": "Floating rate", "min": 8.75, "max": 9.65 }
       ]
     },
     {
       "id": "kotak",
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/loans/home-loan/interest-rates-and-charges.html",
-      "status": "stale",
-      "error": "HTTP 404",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "Salaried",
-          "min": 8.75,
-          "max": 9.5
-        },
-        {
-          "category": "Self-employed",
-          "min": 8.85,
-          "max": 9.6
-        }
+        { "category": "Salaried", "min": 8.75, "max": 9.5 },
+        { "category": "Self-employed", "min": 8.85, "max": 9.6 }
       ]
     },
     {
       "id": "pnbhousing",
       "name": "PNB Housing Finance",
       "source": "https://www.pnbhousing.com/home-loan-interest-rates/",
-      "status": "stale",
-      "error": "HTTP 406",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "CIBIL 825 and above",
-          "min": 8.5,
-          "max": 8.5
-        },
-        {
-          "category": "CIBIL 775 - 824",
-          "min": 8.75,
-          "max": 9.25
-        },
-        {
-          "category": "CIBIL below 700",
-          "min": 10.5,
-          "max": 13
-        }
+        { "category": "CIBIL 825 and above", "min": 8.5, "max": 8.5 },
+        { "category": "CIBIL 775 - 824", "min": 8.75, "max": 9.25 },
+        { "category": "CIBIL below 700", "min": 10.5, "max": 13.0 }
       ]
     },
     {
       "id": "lichf",
       "name": "LIC Housing Finance",
       "source": "https://www.lichousing.com/home-loan-interest-rate",
-      "status": "stale",
-      "error": "no rate rows parsed",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "CIBIL 750 and above",
-          "min": 8.5,
-          "max": 8.7
-        },
-        {
-          "category": "CIBIL 700 - 749",
-          "min": 8.7,
-          "max": 9.5
-        },
-        {
-          "category": "CIBIL below 600",
-          "min": 9.6,
-          "max": 10.75
-        }
+        { "category": "CIBIL 750 and above", "min": 8.5, "max": 8.7 },
+        { "category": "CIBIL 700 - 749", "min": 8.7, "max": 9.5 },
+        { "category": "CIBIL below 600", "min": 9.6, "max": 10.75 }
       ]
     },
     {
       "id": "bob",
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/personal-banking/loans/home-loan",
-      "status": "stale",
-      "error": "no rate rows parsed",
+      "status": "sample",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
-        {
-          "category": "CIBIL 800 and above",
-          "min": 8.4,
-          "max": 8.4
-        },
-        {
-          "category": "CIBIL 726 - 760",
-          "min": 8.6,
-          "max": 9.35
-        },
-        {
-          "category": "CIBIL up to 700",
-          "min": 9.6,
-          "max": 10.5
-        }
+        { "category": "CIBIL 800 and above", "min": 8.4, "max": 8.4 },
+        { "category": "CIBIL 726 - 760", "min": 8.6, "max": 9.35 },
+        { "category": "CIBIL up to 700", "min": 9.6, "max": 10.5 }
       ]
     }
   ]
