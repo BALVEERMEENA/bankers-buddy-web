@@ -2,3 +2,9 @@ node_modules/
 *.log
 scratchpad_*.png
 .DS_Store
+
+# Python (ai_scraper)
+__pycache__/
+*.pyc
+.venv/
+ai_scraper/.env

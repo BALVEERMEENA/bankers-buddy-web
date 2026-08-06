@@ -56,6 +56,28 @@ cd scraper && npm install && npm run scrape
 > The FD Rates tab uses `fetch`, which is blocked on `file://`. Serve the site
 > (`python3 -m http.server`) to view that tab locally.
 
+### AI-powered local extractor (Python)
+
+There are two ways to refresh the rate data:
+
+| | `scraper/` (Node) | `ai_scraper/` (Python + Claude) |
+|---|---|---|
+| Runs | Daily on GitHub Actions | Locally on your laptop |
+| Extraction | Heuristic table parsing | **Claude reads the page** and returns structured rows |
+| Best at | Automation | Messy/JS-heavy pages, and pages that block datacenter IPs |
+
+The Python extractor fetches each bank page with a headless browser and asks
+Claude to extract the rates (needs an Anthropic API key). Because it runs from
+your own IP with a real browser, more banks succeed than in CI. See
+[`ai_scraper/`](ai_scraper/):
+
+```bash
+cd ai_scraper
+pip install -r requirements.txt && playwright install chromium
+export ANTHROPIC_API_KEY=sk-ant-...
+python main.py                 # writes ../data/*.json
+```
+
 ## Tech
 
 Plain HTML, CSS, and vanilla JavaScript for the site — no dependencies, no build

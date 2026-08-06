@@ -1,0 +1,4 @@
+anthropic>=0.69
+playwright>=1.48
+beautifulsoup4>=4.12
+python-dotenv>=1.0
