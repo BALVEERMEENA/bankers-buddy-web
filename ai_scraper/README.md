@@ -16,17 +16,53 @@ Bank sites often block requests from datacenter IPs (like GitHub's servers) but
 allow a normal laptop on a home/office connection. Running here uses **your**
 IP and a **real browser**, so more banks succeed than in CI.
 
-## Setup
+## Choose a backend
+
+The extractor auto-picks one:
+
+- **Local Ollama (default)** — a model running on your own machine. No API
+  key, no cloud, no per-call cost. Slower and a bit less accurate than Claude,
+  but completely free and private.
+- **Anthropic (Claude)** — used automatically if `ANTHROPIC_API_KEY` is set.
+
+Force one with `BANKERS_PROVIDER=ollama` or `BANKERS_PROVIDER=anthropic`.
+
+## Setup — local Ollama (no API key)
+
+1. Install Ollama from **https://ollama.com** (Windows/Mac/Linux) and start it.
+2. Pull a model (one time):
+   ```bash
+   ollama pull llama3.1
+   ```
+3. Install the Python deps:
+
+   **macOS / Linux**
+   ```bash
+   cd ai_scraper
+   python3 -m venv .venv && source .venv/bin/activate
+   pip install -r requirements.txt
+   playwright install chromium
+   ```
+
+   **Windows (CMD)** — run each line separately
+   ```cmd
+   cd ai_scraper
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   playwright install chromium
+   ```
+
+No key or environment variable is needed — with no `ANTHROPIC_API_KEY` set, it
+uses Ollama automatically. To pick a different local model:
+`set BANKERS_MODEL=qwen2.5` (Windows) / `export BANKERS_MODEL=qwen2.5`.
+
+## Setup — Anthropic (optional)
+
+Same install steps, plus a key (macOS/Linux `export`, Windows `set`):
 
 ```bash
-cd ai_scraper
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-playwright install chromium          # one-time browser download
-
-# Provide your Anthropic API key (either works):
-cp .env.example .env                 # then edit .env, OR:
-export ANTHROPIC_API_KEY=sk-ant-...  # OR: ant auth login
+export ANTHROPIC_API_KEY=sk-ant-...   # Windows: set ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ## Run
@@ -54,9 +90,11 @@ cd .. && python3 -m http.server 8000   # open http://localhost:8000
 
 ## Model & cost
 
-Defaults to **`claude-opus-5`**. Extraction is a simple task, so a cheaper
-model is usually fine — set `BANKERS_MODEL=claude-haiku-4-5` (in `.env` or the
-environment) to cut cost. Each bank is roughly one short request.
+- **Ollama (default):** free and local. Default model `llama3.1` (8B) — a good
+  balance for extraction. Larger models (e.g. `qwen2.5:14b`) are more accurate;
+  smaller ones (`llama3.2`) are faster. Set `BANKERS_MODEL` to switch.
+- **Anthropic:** defaults to `claude-opus-5`. Extraction is simple, so
+  `BANKERS_MODEL=claude-haiku-4-5` cuts cost. Each bank is ~one short request.
 
 ## Safeguards (so you never see fake rates)
 

@@ -1,32 +1,34 @@
-"""AI extraction of interest rates from a bank page's text, via Claude.
+"""AI extraction of interest rates from a bank page's text.
 
 An LLM reads the messy page text and returns clean, structured rows — it
 handles wrong tables, rate ranges, CIBIL bands, and differing layouts far
-more reliably than heuristic table parsing. We use the Anthropic SDK's
-structured-output support (`messages.parse` with a Pydantic schema) so the
-result is guaranteed to match the shape the web app expects.
+more reliably than heuristic table parsing.
+
+Two backends, chosen automatically:
+
+* **ollama**  — a local model on your own machine, no API key or cloud.
+* **anthropic** — Claude via the Anthropic API (needs ANTHROPIC_API_KEY).
+
+Selection: BANKERS_PROVIDER=ollama|anthropic overrides; otherwise it's
+"anthropic" when ANTHROPIC_API_KEY is set, else "ollama". Model is
+BANKERS_MODEL, defaulting to a sensible per-provider choice. Both backends
+use JSON-schema structured output so the result matches the app's shape.
 """
 
 import os
 from typing import List, Optional
 
-import anthropic
 from pydantic import BaseModel
 
-# Default to Claude Opus 5. Override with BANKERS_MODEL for a cheaper run,
-# e.g. BANKERS_MODEL=claude-haiku-4-5 — the extraction is simple enough that
-# a smaller model is usually fine.
-MODEL = os.environ.get("BANKERS_MODEL", "claude-opus-5")
+PROVIDER = os.environ.get("BANKERS_PROVIDER", "").strip().lower()
+if not PROVIDER:
+    PROVIDER = "anthropic" if os.environ.get("ANTHROPIC_API_KEY") else "ollama"
 
-# Created lazily so importing this module doesn't require an API key.
-_client: Optional[anthropic.Anthropic] = None
+MODEL = os.environ.get("BANKERS_MODEL") or (
+    "claude-opus-5" if PROVIDER == "anthropic" else "llama3.1"
+)
 
-
-def _client_instance() -> anthropic.Anthropic:
-    global _client
-    if _client is None:
-        _client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
-    return _client
+_anthropic_client = None
 
 
 # ---- Structured output schemas ---------------------------------------------
@@ -66,6 +68,8 @@ Rules:
 - If the text contains no general-public FD rate table, return an empty list.
 - Do not invent values. Only return what is present in the text.
 
+Return ONLY JSON matching the schema: {{"rates": [{{"tenure": str, "general": number, "senior": number or null}}]}}
+
 PAGE TEXT:
 {text}
 """
@@ -86,21 +90,55 @@ Rules:
 - If the text contains no home-loan rate table, return an empty list.
 - Do not invent values. Only return what is present in the text.
 
+Return ONLY JSON matching the schema: {{"rates": [{{"category": str, "min": number, "max": number}}]}}
+
 PAGE TEXT:
 {text}
 """
 
 
-def _parse(prompt: str, schema):
-    resp = _client_instance().messages.parse(
+def _parse_anthropic(prompt, schema):
+    global _anthropic_client
+    import anthropic
+
+    if _anthropic_client is None:
+        _anthropic_client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
+    resp = _anthropic_client.messages.parse(
         model=MODEL,
         max_tokens=4000,
         messages=[{"role": "user", "content": prompt}],
         output_format=schema,
     )
     if resp.stop_reason == "refusal" or resp.parsed_output is None:
-        return []
-    return resp.parsed_output.rates
+        return None
+    return resp.parsed_output
+
+
+def _parse_ollama(prompt, schema):
+    import ollama
+
+    resp = ollama.chat(
+        model=MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        # Structured output: constrain the reply to our JSON schema.
+        format=schema.model_json_schema(),
+        options={"temperature": 0},
+    )
+    msg = getattr(resp, "message", None)
+    content = msg.content if msg is not None else resp["message"]["content"]
+    try:
+        return schema.model_validate_json(content)
+    except Exception:
+        return None
+
+
+def _parse(prompt, schema):
+    obj = (
+        _parse_anthropic(prompt, schema)
+        if PROVIDER == "anthropic"
+        else _parse_ollama(prompt, schema)
+    )
+    return obj.rates if obj else []
 
 
 def extract_fd(text: str, bank: str):

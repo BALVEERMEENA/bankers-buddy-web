@@ -95,7 +95,7 @@ def scrape_bank(product, bank, prev):
 
 
 def scrape_product(product, only_bank=None):
-    print(f"\n{product['label']}  (model: {extract.MODEL})")
+    print(f"\n{product['label']}  ({extract.PROVIDER}: {extract.MODEL})")
     out_path = os.path.join(DATA_DIR, product["out"])
     existing = read_existing(out_path)
     prev_by_id = {b["id"]: b for b in existing.get("banks", [])}

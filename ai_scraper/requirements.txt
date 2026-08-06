@@ -1,4 +1,12 @@
-anthropic>=0.69
+# Core
 playwright>=1.48
 beautifulsoup4>=4.12
 python-dotenv>=1.0
+pydantic>=2.0
+
+# Local LLM backend (default — no API key needed). Needs Ollama running:
+#   https://ollama.com  ->  ollama pull llama3.1
+ollama>=0.4
+
+# Cloud LLM backend (only if you set BANKERS_PROVIDER=anthropic + an API key)
+anthropic>=0.69
