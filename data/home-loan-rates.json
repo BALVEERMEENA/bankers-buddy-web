@@ -2,7 +2,7 @@
   "product": "homeloan",
   "label": "Home Loan",
   "better": "lower",
-  "updatedAt": "2026-08-11T03:20:38.677Z",
+  "updatedAt": "2026-08-12T03:40:13.511Z",
   "disclaimer": "Home-loan rates are scraped from public bank pages; the applicable rate depends on your CIBIL score, loan amount, and profile. Confirm the exact rate with the bank.",
   "currency": "INR",
   "banks": [
@@ -56,7 +56,7 @@
       "name": "ICICI Bank",
       "source": "https://www.icicibank.com/personal-banking/loans/home-loan/interest-rates",
       "status": "live",
-      "fetchedAt": "2026-08-11T03:19:22.641Z",
+      "fetchedAt": "2026-08-12T03:38:38.845Z",
       "rates": [
         {
           "category": "800",
@@ -75,7 +75,7 @@
       "name": "Axis Bank",
       "source": "https://www.axisbank.com/retail/loans/home-loan/interest-rate",
       "status": "stale",
-      "error": "HTTP 404",
+      "error": "no rate rows parsed",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
