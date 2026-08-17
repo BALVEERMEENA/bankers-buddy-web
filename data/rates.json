@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-08-16T02:41:44.001Z",
+  "updatedAt": "2026-08-17T02:41:06.335Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-08-16T02:40:20.209Z",
+      "fetchedAt": "2026-08-17T02:39:24.502Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-08-16T02:40:30.985Z",
+      "fetchedAt": "2026-08-17T02:39:33.991Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,7 +224,7 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-08-16T02:41:06.060Z",
+      "fetchedAt": "2026-08-17T02:40:12.021Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-08-16T02:41:09.361Z",
+      "fetchedAt": "2026-08-17T02:40:15.372Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
