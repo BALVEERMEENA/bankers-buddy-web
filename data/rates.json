@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-08-31T07:17:54.543Z",
+  "updatedAt": "2026-09-01T06:31:12.425Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-08-31T07:16:18.271Z",
+      "fetchedAt": "2026-09-01T06:29:37.406Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-08-31T07:16:27.869Z",
+      "fetchedAt": "2026-09-01T06:29:48.589Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,7 +224,7 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-08-31T07:17:04.086Z",
+      "fetchedAt": "2026-09-01T06:30:25.727Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
@@ -298,12 +298,12 @@
         },
         {
           "tenure": "18 months - less than 2 Years",
-          "general": 6.7,
+          "general": 6.6,
           "senior": 6.6
         },
         {
           "tenure": "2 years and above but less than 3 years",
-          "general": 6.7,
+          "general": 6.6,
           "senior": 6.6
         },
         {
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-08-31T07:17:07.356Z",
+      "fetchedAt": "2026-09-01T06:30:29.275Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
