@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-09-05T06:04:41.290Z",
+  "updatedAt": "2026-09-06T06:16:19.453Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -10,9 +10,8 @@
       "id": "sbi",
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
-      "status": "stale",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits\", waiting until \"domcontentloaded\"\n",
-      "fetchedAt": "2026-09-04T06:15:52.176Z",
+      "status": "live",
+      "fetchedAt": "2026-09-06T06:14:49.182Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -61,92 +60,102 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-09-05T06:03:21.141Z",
+      "fetchedAt": "2026-09-06T06:15:01.819Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
-          "general": 3.5,
-          "senior": 3.5
+          "general": 2.75,
+          "senior": 3.25
         },
         {
           "tenure": "15-29 days",
-          "general": 3.5,
-          "senior": 3.5
+          "general": 2.75,
+          "senior": 3.25
         },
         {
           "tenure": "30-45 days",
-          "general": 4.5,
-          "senior": 4
+          "general": 3.25,
+          "senior": 3.75
         },
         {
           "tenure": "46-60 days",
-          "general": 4.75,
-          "senior": 4
+          "general": 4.25,
+          "senior": 4.75
         },
         {
-          "tenure": "61-88 days",
-          "general": 5.25,
-          "senior": 4
+          "tenure": "61-89 days",
+          "general": 4.25,
+          "senior": 4.75
         },
         {
-          "tenure": "89 days <= 120 Days",
+          "tenure": "90 days <= 6 months",
+          "general": 4.25,
+          "senior": 4.75
+        },
+        {
+          "tenure": "6 months 1 day <=9 months",
           "general": 5.5,
-          "senior": 4
-        },
-        {
-          "tenure": "121 days <= 150 days",
-          "general": 5.5,
-          "senior": 4
-        },
-        {
-          "tenure": "151 days <=6 Months",
-          "general": 5.5,
-          "senior": 4
-        },
-        {
-          "tenure": "6 months 1 day <=9months",
-          "general": 5.75,
-          "senior": 4
+          "senior": 6
         },
         {
           "tenure": "9 months 1 day to < 1 Year",
-          "general": 6,
-          "senior": 4.25
+          "general": 5.75,
+          "senior": 6.25
         },
         {
           "tenure": "1 Year to < 15 months",
-          "general": 6.6,
-          "senior": 4.25
+          "general": 6.25,
+          "senior": 6.75
         },
         {
           "tenure": "15 months to < 18 months",
-          "general": 6.25,
-          "senior": 4.25
+          "general": 6.35,
+          "senior": 6.85
         },
         {
           "tenure": "18 months to < 21 months",
-          "general": 6.4,
-          "senior": 4.25
+          "general": 6.45,
+          "senior": 6.95
         },
         {
           "tenure": "21 months to 2 years",
+          "general": 6.45,
+          "senior": 6.95
+        },
+        {
+          "tenure": "2 Years 1 day to < 2 Year 11 Months",
+          "general": 6.45,
+          "senior": 6.95
+        },
+        {
+          "tenure": "2 Years 11 Months (35 months)",
+          "general": 6.45,
+          "senior": 6.95
+        },
+        {
+          "tenure": "2 Years 11 Months 1 day <= 3 Year",
+          "general": 6.45,
+          "senior": 6.95
+        },
+        {
+          "tenure": "3 Years 1 day to < 4 Years 7 Months",
+          "general": 6.5,
+          "senior": 7.1
+        },
+        {
+          "tenure": "4 Year 7 Months (55 months)",
           "general": 6.4,
-          "senior": 4.25
+          "senior": 6.9
         },
         {
-          "tenure": "2 year 1 day to 3 years",
-          "general": 6.5,
-          "senior": 4.25
+          "tenure": "4 Year 7 Months 1 day <=5 Years",
+          "general": 6.4,
+          "senior": 6.9
         },
         {
-          "tenure": "3 year 1 day to 5 years",
-          "general": 6.5,
-          "senior": 4.25
-        },
-        {
-          "tenure": "5 year 1 day to 10 years",
-          "general": 6.5,
-          "senior": 4.25
+          "tenure": "5 Years 1 day to 10 Years",
+          "general": 6.15,
+          "senior": 6.65
         }
       ]
     },
@@ -225,7 +234,7 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-09-05T06:03:58.604Z",
+      "fetchedAt": "2026-09-06T06:15:38.907Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
@@ -329,7 +338,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-09-05T06:04:01.953Z",
+      "fetchedAt": "2026-09-06T06:15:43.846Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
