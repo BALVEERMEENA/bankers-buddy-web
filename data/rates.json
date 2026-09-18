@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-09-17T06:24:53.338Z",
+  "updatedAt": "2026-09-18T06:17:21.728Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-09-17T06:23:27.971Z",
+      "fetchedAt": "2026-09-18T06:15:16.725Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-09-17T06:23:37.833Z",
+      "fetchedAt": "2026-09-18T06:15:25.944Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,57 +224,57 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-09-17T06:24:11.093Z",
+      "fetchedAt": "2026-09-18T06:16:02.605Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
           "general": 3.5,
-          "senior": 4.25
+          "senior": 4
         },
         {
           "tenure": "15 - 30 Days",
           "general": 3.5,
-          "senior": 4.5
+          "senior": 4.25
         },
         {
           "tenure": "31 - 45 Days",
           "general": 4.25,
-          "senior": 4.75
+          "senior": 4.6
         },
         {
           "tenure": "46 - 60 Days",
           "general": 4.5,
-          "senior": 5
+          "senior": 4.8
         },
         {
           "tenure": "61 - 90 Days",
           "general": 4.5,
-          "senior": 6
+          "senior": 5.75
         },
         {
           "tenure": "91 Days",
           "general": 5.25,
-          "senior": 6.1
+          "senior": 5.85
         },
         {
           "tenure": "92 Days - 120 Days",
           "general": 5.5,
-          "senior": 6.25
+          "senior": 6
         },
         {
           "tenure": "121 Days - 179 Days",
           "general": 5.75,
-          "senior": 6.45
+          "senior": 6.2
         },
         {
           "tenure": "180 Days",
           "general": 6,
-          "senior": 6.55
+          "senior": 6.3
         },
         {
           "tenure": "181 Days to 270 Days",
           "general": 6,
-          "senior": 6.6
+          "senior": 6.35
         },
         {
           "tenure": "271 Days to 279 Days",
@@ -284,17 +284,17 @@
         {
           "tenure": "280Days - 364 days",
           "general": 6,
-          "senior": 6.75
+          "senior": 6.5
         },
         {
           "tenure": "365 days - Less Than 15Months",
           "general": 6.6,
-          "senior": 6.9
+          "senior": 6.7
         },
         {
           "tenure": "15 months - less than 18 months",
           "general": 6.6,
-          "senior": 6.8
+          "senior": 6.65
         },
         {
           "tenure": "18 months - less than 2 Years",
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-09-17T06:24:14.402Z",
+      "fetchedAt": "2026-09-18T06:16:06.634Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
@@ -452,7 +452,7 @@
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/deposits-interest-rates",
       "status": "stale",
-      "error": "HTTP 404",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.bankofbaroda.in/personal-banking/accounts/deposits/fixed-deposit\", waiting until \"domcontentloaded\"\n",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
