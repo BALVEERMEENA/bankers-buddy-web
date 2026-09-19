@@ -2,7 +2,7 @@
   "product": "homeloan",
   "label": "Home Loan",
   "better": "lower",
-  "updatedAt": "2026-09-18T06:20:01.464Z",
+  "updatedAt": "2026-09-19T06:19:13.851Z",
   "disclaimer": "Home-loan rates are scraped from public bank pages; the applicable rate depends on your CIBIL score, loan amount, and profile. Confirm the exact rate with the bank.",
   "currency": "INR",
   "banks": [
@@ -56,7 +56,7 @@
       "name": "ICICI Bank",
       "source": "https://www.icicibank.com/personal-banking/loans/home-loan/interest-rates",
       "status": "live",
-      "fetchedAt": "2026-09-18T06:18:11.591Z",
+      "fetchedAt": "2026-09-19T06:17:56.355Z",
       "rates": [
         {
           "category": "800",
@@ -160,7 +160,7 @@
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/loans-advances-interest-rate",
       "status": "stale",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.bankofbaroda.in/personal-banking/loans/home-loan\", waiting until \"domcontentloaded\"\n",
+      "error": "no rate rows parsed",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
