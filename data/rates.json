@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-10-06T07:51:27.667Z",
+  "updatedAt": "2026-10-07T07:30:53.598Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-10-06T07:49:30.683Z",
+      "fetchedAt": "2026-10-07T07:29:00.899Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-10-06T07:49:40.236Z",
+      "fetchedAt": "2026-10-07T07:29:11.687Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,7 +224,7 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-10-06T07:50:18.032Z",
+      "fetchedAt": "2026-10-07T07:29:48.491Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-10-06T07:50:21.880Z",
+      "fetchedAt": "2026-10-07T07:29:51.844Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
@@ -452,7 +452,7 @@
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/deposits-interest-rates",
       "status": "stale",
-      "error": "HTTP 404",
+      "error": "page.goto: net::ERR_CONNECTION_RESET at https://www.bankofbaroda.in/personal-banking/accounts/deposits/fixed-deposit\nCall log:\n  - navigating to \"https://www.bankofbaroda.in/personal-banking/accounts/deposits/fixed-deposit\", waiting until \"domcontentloaded\"\n",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
