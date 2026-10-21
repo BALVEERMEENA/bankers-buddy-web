@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-10-20T06:18:48.386Z",
+  "updatedAt": "2026-10-21T06:18:47.895Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-10-20T06:17:07.191Z",
+      "fetchedAt": "2026-10-21T06:17:00.536Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-10-20T06:17:16.226Z",
+      "fetchedAt": "2026-10-21T06:17:09.239Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,12 +224,12 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-10-20T06:17:52.760Z",
+      "fetchedAt": "2026-10-21T06:17:45.371Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
           "general": 3.5,
-          "senior": 4
+          "senior": 3.75
         },
         {
           "tenure": "15 - 30 Days",
@@ -239,12 +239,12 @@
         {
           "tenure": "31 - 45 Days",
           "general": 4.25,
-          "senior": 4.6
+          "senior": 4.7
         },
         {
           "tenure": "46 - 60 Days",
           "general": 4.5,
-          "senior": 4.8
+          "senior": 5
         },
         {
           "tenure": "61 - 90 Days",
@@ -254,27 +254,27 @@
         {
           "tenure": "91 Days",
           "general": 5.25,
-          "senior": 5.85
+          "senior": 6.1
         },
         {
           "tenure": "92 Days - 120 Days",
           "general": 5.5,
-          "senior": 6
+          "senior": 6.25
         },
         {
           "tenure": "121 Days - 179 Days",
           "general": 5.75,
-          "senior": 6.2
+          "senior": 6.3
         },
         {
           "tenure": "180 Days",
           "general": 6,
-          "senior": 6.3
+          "senior": 6.75
         },
         {
           "tenure": "181 Days to 270 Days",
           "general": 6,
-          "senior": 6.4
+          "senior": 6.75
         },
         {
           "tenure": "271 Days to 279 Days",
@@ -284,27 +284,27 @@
         {
           "tenure": "280Days - 364 days",
           "general": 6,
-          "senior": 6.5
+          "senior": 6.75
         },
         {
           "tenure": "365 days - Less Than 15Months",
           "general": 6.6,
-          "senior": 6.65
+          "senior": 6.75
         },
         {
           "tenure": "15 months - less than 18 months",
           "general": 6.6,
-          "senior": 6.6
+          "senior": 6.8
         },
         {
           "tenure": "18 months - less than 2 Years",
           "general": 6.55,
-          "senior": 6.55
+          "senior": 6.8
         },
         {
           "tenure": "2 years and above but less than 3 years",
           "general": 6.55,
-          "senior": 6.55
+          "senior": 6.8
         },
         {
           "tenure": "3 years and above but less than 4 years",
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-10-20T06:17:55.862Z",
+      "fetchedAt": "2026-10-21T06:17:48.500Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
