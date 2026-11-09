@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-11-08T07:43:42.305Z",
+  "updatedAt": "2026-11-09T08:23:06.649Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-11-08T07:41:49.973Z",
+      "fetchedAt": "2026-11-09T08:21:23.390Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-11-08T07:41:59.693Z",
+      "fetchedAt": "2026-11-09T08:21:37.179Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,57 +224,57 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-11-08T07:42:36.389Z",
+      "fetchedAt": "2026-11-09T08:22:15.374Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
           "general": 3.5,
-          "senior": 3.75
+          "senior": 4.5
         },
         {
           "tenure": "15 - 30 Days",
           "general": 3.5,
-          "senior": 4.5
+          "senior": 4.75
         },
         {
           "tenure": "31 - 45 Days",
           "general": 4.25,
-          "senior": 4.7
+          "senior": 5
         },
         {
           "tenure": "46 - 60 Days",
           "general": 4.5,
-          "senior": 5
+          "senior": 5.5
         },
         {
           "tenure": "61 - 90 Days",
           "general": 4.5,
-          "senior": 5.75
+          "senior": 6.25
         },
         {
           "tenure": "91 Days",
           "general": 5.25,
-          "senior": 6.1
+          "senior": 6.25
         },
         {
           "tenure": "92 Days - 120 Days",
           "general": 5.5,
-          "senior": 6.65
+          "senior": 6.5
         },
         {
           "tenure": "121 Days - 179 Days",
           "general": 5.75,
-          "senior": 6.75
+          "senior": 7
         },
         {
           "tenure": "180 Days",
           "general": 6,
-          "senior": 6.75
+          "senior": 7
         },
         {
           "tenure": "181 Days to 270 Days",
           "general": 6,
-          "senior": 6.75
+          "senior": 7.15
         },
         {
           "tenure": "271 Days to 279 Days",
@@ -284,42 +284,42 @@
         {
           "tenure": "280Days - 364 days",
           "general": 6,
-          "senior": 6.75
+          "senior": 7.15
         },
         {
           "tenure": "365 days - Less Than 15Months",
           "general": 6.6,
-          "senior": 6.85
+          "senior": 7.25
         },
         {
           "tenure": "15 months - less than 18 months",
           "general": 6.6,
-          "senior": 7.1
+          "senior": 7.3
         },
         {
           "tenure": "18 months - less than 2 Years",
           "general": 6.55,
-          "senior": 6.8
+          "senior": 7.35
         },
         {
           "tenure": "2 years and above but less than 3 years",
           "general": 6.55,
-          "senior": 6.8
+          "senior": 7.35
         },
         {
           "tenure": "3 years and above but less than 4 years",
           "general": 6.25,
-          "senior": 6.25
+          "senior": 7
         },
         {
           "tenure": "4 years and above but less than 5 years",
           "general": 6.25,
-          "senior": 6.25
+          "senior": 7
         },
         {
           "tenure": "5 years and above upto & inclusive of 7 years",
           "general": 6.05,
-          "senior": 6.05
+          "senior": 6.5
         }
       ]
     },
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-11-08T07:42:39.890Z",
+      "fetchedAt": "2026-11-09T08:22:19.372Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
@@ -432,7 +432,7 @@
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/deposits-interest-rates",
       "status": "stale",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.bankofbaroda.in/personal-banking/accounts/deposits/fixed-deposit\", waiting until \"domcontentloaded\"\n",
+      "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
