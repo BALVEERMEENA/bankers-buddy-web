@@ -2,7 +2,7 @@
   "product": "fd",
   "label": "Fixed Deposit",
   "better": "higher",
-  "updatedAt": "2026-11-14T07:50:53.056Z",
+  "updatedAt": "2026-11-15T08:08:54.951Z",
   "disclaimer": "FD rates are scraped from public bank pages for general-public deposits and may lag the bank's live figures. Always confirm with the bank before acting.",
   "currency": "INR",
   "banks": [
@@ -11,7 +11,7 @@
       "name": "State Bank of India",
       "source": "https://www.sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits",
       "status": "live",
-      "fetchedAt": "2026-11-14T07:48:26.319Z",
+      "fetchedAt": "2026-11-15T08:06:49.250Z",
       "rates": [
         {
           "tenure": "7 days to 45 days",
@@ -60,7 +60,7 @@
       "name": "HDFC Bank",
       "source": "https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate",
       "status": "live",
-      "fetchedAt": "2026-11-14T07:48:35.954Z",
+      "fetchedAt": "2026-11-15T08:07:00.150Z",
       "rates": [
         {
           "tenure": "7 - 14 days",
@@ -224,7 +224,7 @@
       "name": "Kotak Mahindra Bank",
       "source": "https://www.kotak.com/en/personal-banking/deposits/fixed-deposit/fixed-deposit-interest-rate.html",
       "status": "live",
-      "fetchedAt": "2026-11-14T07:49:14.813Z",
+      "fetchedAt": "2026-11-15T08:07:37.941Z",
       "rates": [
         {
           "tenure": "7 - 14 Days",
@@ -328,7 +328,7 @@
       "name": "Punjab National Bank",
       "source": "https://www.pnbindia.in/interest-rates-deposit.html",
       "status": "live",
-      "fetchedAt": "2026-11-14T07:49:18.689Z",
+      "fetchedAt": "2026-11-15T08:07:42.256Z",
       "rates": [
         {
           "tenure": "7 to 14 Days",
@@ -432,7 +432,7 @@
       "name": "Bank of Baroda",
       "source": "https://www.bankofbaroda.in/interest-rate-and-service-charges/deposits-interest-rates",
       "status": "stale",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.bankofbaroda.in/personal-banking/accounts/deposits/fixed-deposit\", waiting until \"domcontentloaded\"\n",
+      "error": "HTTP 404",
       "fetchedAt": "2026-08-05T00:00:00Z",
       "rates": [
         {
